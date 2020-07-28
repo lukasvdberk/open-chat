@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  front-end:
+    container_name: frond-end-js-svelte
+    build: ./front-end/
+    command: sh ./start.sh
+    env_file: .env
+    networks:
+      - base
+    volumes:
+      - ./front-end:/front-end/
+      - web-static:/front-end/public
+  backend:
+    container_name: backend-go-fiber
+    build: ./backend/
+    command: sh ./start.sh
+    env_file: .env
+    expose:
+      - "4000"
+    ports:
+      - "4000:4000"
+    networks:
+      - base
+    depends_on:
+      - mysql-db
+    volumes:
+      - ./backend/:/app
+      - web-static:/app/front-end-public
+  mysql-db:
+    container_name: db-mysql
+    restart: always
+    build: mysql-db-config
+    ports:
+      - "3306:3306"
+    networks:
+      - base
+    logging:
+      driver: "none"
+    env_file: .env
+    volumes:
+      - ./mysql-db-data:/var/lib/mysql
+
+networks:
+  base:
+
+volumes:
+  web-static:
