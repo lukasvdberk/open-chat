@@ -1,4 +1,4 @@
--- TODO refactor with opensource discordd
+-- TODO refactor with env file
 use opensource_discord;
 
 CREATE TABLE User
