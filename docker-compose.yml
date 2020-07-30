@@ -8,9 +8,14 @@ services:
     env_file: .env
     networks:
       - base
+    expose:
+      - "5000"
+    ports:
+      - "5000:5000"
     volumes:
       - ./front-end:/front-end/
-      - web-static:/front-end/public
+#      - TODO fix. for some with this included it wont serve!
+#      - web-static:/front-end/public
   backend:
     container_name: backend-go-fiber
     build: ./backend/

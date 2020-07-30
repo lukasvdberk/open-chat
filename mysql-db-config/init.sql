@@ -6,6 +6,7 @@ CREATE TABLE User
     id INTEGER AUTO_INCREMENT,
     username TEXT,
     password TEXT,
+    profilePhoto TEXT,
     PRIMARY KEY (id)
 );
 
