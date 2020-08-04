@@ -1,5 +1,5 @@
 .idea/
 mysqldata/
 .env
-backend/main
+src/main
 mysql-db-data

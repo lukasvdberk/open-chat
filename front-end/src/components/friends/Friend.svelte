@@ -19,6 +19,7 @@
         vertical-align: middle;
     }
 
+
     .isActive {
         color: var(--opposite-text);
         background-color: var(--is-active) !important;
@@ -26,7 +27,6 @@
 </style>
 
 <div class:isActive>
-    <!--  TODO add isactive  -->
     <img src={profilePhoto} alt={username} />
     <span class:isActive>{username}</span>
 </div>

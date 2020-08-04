@@ -12,13 +12,15 @@ services:
       - "5000"
     ports:
       - "5000:5000"
+    logging:
+      driver: "none"
     volumes:
       - ./front-end:/front-end/
 #      - TODO fix. for some with this included it wont serve!
 #      - web-static:/front-end/public
   backend:
     container_name: backend-go-fiber
-    build: ./backend/
+    build: backend/
     command: sh ./start.sh
     env_file: .env
     expose:
