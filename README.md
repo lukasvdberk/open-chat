@@ -12,6 +12,12 @@ Technology used for this project:
 - Svelte for the front-end
 
 ### Installation 
+Clone the repo to the following location
+```
+go/src/github.com/lukasvdberk
+```
+Else you won't get any IDE support.
+
 Make sure you add a .env file with the following content at the root of the project.
 ```env
 MYSQL_DATABASE=db_name
