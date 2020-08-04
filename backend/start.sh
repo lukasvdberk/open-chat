@@ -5,7 +5,6 @@ if $IS_LIVE ; then
     echo 'Running production'
     # TODO implement production probably the same.
 else
-#  ls **/*.go | entr go build -o main . && ./main
-  go build -o main .
-  ./main
+    echo "Running development"
+    CompileDaemon --build="go build -o main ." --command=./main
 fi
