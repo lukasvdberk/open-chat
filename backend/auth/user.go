@@ -14,8 +14,8 @@ type User struct {
 	ProfilePhoto string `json:"profilePhoto"`
 }
 
-// TODO add profile photo
 func RegisterUser(user *User) *User {
+	// Only requires username and password to be filled!
 	// Hashes the password and saves the user to the database.
 
 	db := database.GetSqlConnection()

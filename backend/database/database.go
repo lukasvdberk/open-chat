@@ -8,7 +8,6 @@ import (
 
 import _ "github.com/go-sql-driver/mysql"
 
-// TODO add proper error handling
 func GetSqlConnection() *sql.DB {
 	// Gets connection info from environment variables
 	dbHost := "tcp(db-mysql:3306)"
