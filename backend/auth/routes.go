@@ -3,14 +3,14 @@ package auth
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber"
+	jwtware "github.com/gofiber/jwt"
+	"github.com/lukasvdberk/opensource-discord/config"
 	"github.com/lukasvdberk/opensource-discord/responses"
 	"time"
 )
 
 func GetRoutes(app *fiber.App) *fiber.App {
-	// TODO refactor with base api route
-	// TODO add proper struct with respond codes or something
-	app.Post("/api/auth/login", func(c *fiber.Ctx) {
+	app.Post(config.GetDefaultApiRoute()+"/auth/login", func(c *fiber.Ctx) {
 		c.Accepts("application/json")
 		user := new(User)
 
@@ -29,20 +29,21 @@ func GetRoutes(app *fiber.App) *fiber.App {
 				claims["exp"] = time.Now().Add(time.Hour * 720).Unix()
 
 				// Generate encoded token and send it as response.
-				t, err := token.SignedString([]byte(getSecret()))
+				t, err := token.SignedString([]byte(getJWTSecret()))
 				if err != nil {
-					// TODO add custom error handler
 					c.SendStatus(fiber.StatusInternalServerError)
+					responses.ErrorResponse(3, fiber.Map{
+						"errorMessage": "Failed to create token",
+					}, c)
 					return
 				}
 
-				responses.Response(fiber.Map{
+				responses.ErrorResponse(0, fiber.Map{
 					"token": t,
 				}, c)
 			} else {
-				responses.Response(fiber.Map{
-					"code":    2,
-					"message": "User with specified information does not exist",
+				responses.ErrorResponse(2, fiber.Map{
+					"errorMessage": "User with specified information does not exist",
 				}, c)
 			}
 		} else {
@@ -50,7 +51,7 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		}
 	})
 
-	app.Post("/api/auth/register", func(c *fiber.Ctx) {
+	app.Post(config.GetDefaultApiRoute()+"/auth/register", func(c *fiber.Ctx) {
 		c.Accepts("application/json")
 		user := new(User)
 
@@ -67,30 +68,27 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		}
 	})
 
-	app.Get("/api/auth/get-new-token", func(c *fiber.Ctx) {
+	app.Get(config.GetDefaultApiRoute()+"/auth/get-new-token", func(c *fiber.Ctx) {
 		c.Accepts("application/json")
 		c.Send("yes")
 	})
+
+	// setup jwt middleware
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte(getJWTSecret()),
+	}))
 
 	return app
 }
 
 func invalidInformationResponse(c *fiber.Ctx) {
-	responses.Response(fiber.Map{
-		"code":    1,
-		"message": "Did not send username and password",
+	responses.ErrorResponse(1, fiber.Map{
+		"errorMessage": "Did not send username and password",
 	}, c)
 }
 
 func successResponse(message string, c *fiber.Ctx) {
-	responses.Response(fiber.Map{
-		"code":    0,
+	responses.SuccessResponse(fiber.Map{
 		"message": message,
 	}, c)
-}
-
-func getSecret() string {
-	// TODO replace with .env variable
-	// TODO put this function in some sort config thing
-	return "ceb020a5-7a88-498d-a5a8-7e30d6dbb524"
 }

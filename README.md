@@ -24,6 +24,7 @@ MYSQL_DATABASE=db_name
 MYSQL_ROOT_PASSWORD=password
 MYSQL_USER=user
 MYSQL_PASSWORD=password
+JWT_SECRET=secret_key
 IS_LIVE=false
 ```
 To run this project make sure docker and docker-compose is installed.
