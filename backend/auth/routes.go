@@ -2,6 +2,7 @@ package auth
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
 	jwtware "github.com/gofiber/jwt"
 	"github.com/lukasvdberk/opensource-discord/config"
@@ -10,6 +11,10 @@ import (
 )
 
 func GetRoutes(app *fiber.App) *fiber.App {
+	// So we can make request from the browser
+	// TODO add a different configuration when deployed or setup nginx.
+	app.Use(cors.New())
+
 	app.Post(config.GetDefaultApiRoute()+"/auth/login", func(c *fiber.Ctx) {
 		c.Accepts("application/json")
 		user := new(User)
@@ -17,18 +22,17 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		_ = c.BodyParser(user)
 
 		if user.Password != "" && user.Username != "" {
-
+			// Also updates the user id so that is why we need to pass it as a pointer
 			isValidUser := CheckUserCredentials(&user)
 
 			if isValidUser {
-				// Create JWT token
 				token := jwt.New(jwt.SigningMethodHS256)
 				claims := token.Claims.(jwt.MapClaims)
 				claims["userId"] = user.Id
 				// Good for a month
 				claims["exp"] = time.Now().Add(time.Hour * 720).Unix()
 
-				// Generate encoded token and send it as response.
+				// Generate encoded token
 				t, err := token.SignedString([]byte(getJWTSecret()))
 				if err != nil {
 					c.SendStatus(fiber.StatusInternalServerError)
@@ -73,7 +77,7 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		c.Send("yes")
 	})
 
-	// setup jwt middleware
+	// setup jwt middleware. all requests after this are authenticated requests.
 	app.Use(jwtware.New(jwtware.Config{
 		SigningKey: []byte(getJWTSecret()),
 	}))
@@ -83,7 +87,7 @@ func GetRoutes(app *fiber.App) *fiber.App {
 
 func invalidInformationResponse(c *fiber.Ctx) {
 	responses.ErrorResponse(1, fiber.Map{
-		"errorMessage": "Did not send username and password",
+		"errorMessage": "Missing information",
 	}, c)
 }
 

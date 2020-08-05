@@ -8,7 +8,7 @@ Technology used for this project:
 
 - Go as the programming language for the backend
 - Fiber as webframework for the go language
-- MySQL for storring for storring information
+- MySQL for storing information
 - Svelte for the front-end
 
 ### Installation 
@@ -28,7 +28,7 @@ JWT_SECRET=secret_key
 IS_LIVE=false
 ```
 To run this project make sure docker and docker-compose is installed.
-Simply then run
+Simply then run:
 ```bash
 docker-compose up --build --force-recreate
 ```

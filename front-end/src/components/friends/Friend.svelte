@@ -2,8 +2,6 @@
     export let username;
     export let profilePhoto;
     export let isActive = false;
-
-    console.log(isActive)
 </script>
 
 <style>
@@ -18,7 +16,6 @@
         height: 48px;
         vertical-align: middle;
     }
-
 
     .isActive {
         color: var(--opposite-text);

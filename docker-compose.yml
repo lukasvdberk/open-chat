@@ -12,8 +12,6 @@ services:
       - "5000"
     ports:
       - "5000:5000"
-    logging:
-      driver: "none"
     volumes:
       - ./front-end:/front-end/
 #      - TODO fix. for some with this included it wont serve!
@@ -42,8 +40,6 @@ services:
       - "3306:3306"
     networks:
       - base
-    logging:
-      driver: "none"
     env_file: .env
     volumes:
       - ./mysql-db-data:/var/lib/mysql
