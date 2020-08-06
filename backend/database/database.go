@@ -89,3 +89,27 @@ func SelectStatement(prepareStatement string, arguments ...interface{}) []map[st
 	_ = db.Close()
 	return rowsMapped
 }
+
+func InsertStatement(insertStatement string, arguments ...interface{}) int64 {
+	// @return will return the id of the created record. If it fails will return -1
+
+	db := GetSqlConnection()
+	stmtIns, err := db.Prepare(insertStatement)
+
+	if err != nil {
+		return -1
+	}
+
+	res, err := stmtIns.Exec(arguments...)
+	if err != nil {
+		return -1
+	}
+
+	id, err := res.LastInsertId()
+
+	if err != nil {
+		return -1
+	}
+
+	return id
+}

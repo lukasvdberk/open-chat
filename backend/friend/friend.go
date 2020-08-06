@@ -6,6 +6,12 @@ import (
 	"strconv"
 )
 
+type Friend struct {
+	Id    int64     `json:"id"`
+	User1 auth.User `json:"user1"`
+	User2 auth.User `json:"user2"`
+}
+
 func GetFriendsByUserId(userId int64) []auth.User {
 	// Only the following data will be put in the user struct
 	// id, username, profilephoto
@@ -35,4 +41,9 @@ func GetFriendsByUserId(userId int64) []auth.User {
 	}
 
 	return friends
+}
+
+func IsUserFriend(userId1 int64, userId2 int64) bool {
+	// TODO implement for security reasons in messages.
+	return true
 }

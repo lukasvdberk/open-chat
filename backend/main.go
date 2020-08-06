@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber"
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/friend"
+	"github.com/lukasvdberk/opensource-discord/message/direct"
 )
 
 func main() {
@@ -14,6 +15,8 @@ func main() {
 	app = auth.GetRoutes(app)
 	app = friend.GetRoutes(app)
 
+	// direct messages
+	app = direct.GetRoutes(app)
 	app.Static("/", "./front-end-public")
 
 	_ = app.Listen("0.0.0.0:4000")
