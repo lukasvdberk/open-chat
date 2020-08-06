@@ -24,6 +24,11 @@
 </style>
 
 <div class:isActive>
-    <img src={profilePhoto} alt={username} />
+    {#if profilePhoto !== ""}
+        <img src={profilePhoto} alt={username} />
+    {:else}
+        <!--   TODO replace stock image with custom own made image     -->
+        <img src="https://file.coffee/u/4SmZXSKoA.png" alt={username} />
+    {/if}
     <span class:isActive>{username}</span>
 </div>

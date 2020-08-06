@@ -32,3 +32,60 @@ func GetSqlConnection() *sql.DB {
 
 	return db
 }
+func SelectStatement(prepareStatement string, arguments ...interface{}) []map[string]string {
+	// performs a query with a preparestatemnt
+	// the arguments is the values you want the ? to replace with.
+	// @return A list of maps where each map is a row that come back from the select statement
+
+	db := GetSqlConnection()
+	stmtOut, err := db.Prepare(prepareStatement)
+
+	if err != nil {
+		return nil
+	}
+
+	rows, err := stmtOut.Query(arguments...)
+	if err != nil {
+		return nil
+	}
+
+	// Get column names
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil
+	}
+
+	values := make([]sql.RawBytes, len(columns))
+
+	scanArgs := make([]interface{}, len(values))
+	for i := range values {
+		scanArgs[i] = &values[i]
+	}
+
+	// This will be returned
+	var rowsMapped []map[string]string
+
+	for rows.Next() {
+		err = rows.Scan(scanArgs...)
+		if err != nil {
+			return nil
+		}
+		var value string
+
+		var rowMap map[string]string
+		rowMap = make(map[string]string)
+
+		for i, col := range values {
+			if col != nil {
+				column := columns[i]
+				value = string(col)
+
+				rowMap[column] = value
+			}
+		}
+		rowsMapped = append(rowsMapped, rowMap)
+	}
+
+	_ = db.Close()
+	return rowsMapped
+}

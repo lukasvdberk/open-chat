@@ -1,6 +1,6 @@
 <!-- Responsible for fetching and setting the data for the friends tab -->
 <script>
-    import {onMount} from "svelte";
+import 1{onMount} from "svelte";
     import {getFriends} from "./friends";
     import Friend from "./Friend.svelte";
 
@@ -8,7 +8,6 @@
     let friends = []
     onMount(async () => {
         friends = await getFriends()
-        friends[0].isActive = true
     })
 </script>
 

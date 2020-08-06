@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
@@ -19,9 +21,16 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		c.Accepts("application/json")
 		user := new(User)
 
-		_ = c.BodyParser(user)
+		// Don't use BodyParse for the auth endpoints since password wont be parsed
+		userMap := make(map[string]string)
+		_ = json.Unmarshal([]byte(c.Body()), &userMap)
 
-		if user.Password != "" && user.Username != "" {
+		user.Username = userMap["username"]
+		user.password = userMap["password"]
+
+		fmt.Println(user.Username)
+		fmt.Println(user.password)
+		if user.password != "" && user.Username != "" {
 			// Also updates the user id so that is why we need to pass it as a pointer
 			isValidUser := CheckUserCredentials(&user)
 
@@ -59,9 +68,14 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		c.Accepts("application/json")
 		user := new(User)
 
-		_ = c.BodyParser(user)
+		// Don't use BodyParse for the auth endpoints since password wont be parsed
+		userMap := make(map[string]string)
+		_ = json.Unmarshal([]byte(c.Body()), &userMap)
 
-		if user.Password != "" && user.Username != "" {
+		user.Username = userMap["username"]
+		user.password = userMap["password"]
+
+		if user.password != "" && user.Username != "" {
 			userWithId := RegisterUser(user)
 
 			if userWithId != nil {
@@ -74,7 +88,7 @@ func GetRoutes(app *fiber.App) *fiber.App {
 
 	app.Get(config.GetDefaultApiRoute()+"/auth/get-new-token", func(c *fiber.Ctx) {
 		c.Accepts("application/json")
-		c.Send("yes")
+		c.Send("not implemented yet")
 	})
 
 	// setup jwt middleware. all requests after this are authenticated requests.

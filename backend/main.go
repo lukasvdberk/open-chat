@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gofiber/fiber"
 	"github.com/lukasvdberk/opensource-discord/auth"
+	"github.com/lukasvdberk/opensource-discord/friend"
 )
 
 func main() {
@@ -11,6 +12,7 @@ func main() {
 	// NOTE IMPORTANT: All public routes should be imported before auth.GetRoutes.
 	// all routes that requires authentication should be imported after.
 	app = auth.GetRoutes(app)
+	app = friend.GetRoutes(app)
 
 	app.Static("/", "./front-end-public")
 

@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"database/sql"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"golang.org/x/crypto/bcrypt"
 	"strconv"
@@ -10,8 +9,8 @@ import (
 type User struct {
 	Id           int64  `json:"id"`
 	Username     string `json:"username"`
-	Password     string `json:"password"`
 	ProfilePhoto string `json:"profilePhoto"`
+	password     string
 }
 
 func RegisterUser(user *User) *User {
@@ -25,7 +24,7 @@ func RegisterUser(user *User) *User {
 		return nil
 	}
 
-	_, hashedPassword := hashPassword(user.Password)
+	_, hashedPassword := hashPassword(user.password)
 	res, err := stmtIns.Exec(user.Username, hashedPassword)
 	if err != nil {
 		return nil
@@ -41,59 +40,27 @@ func RegisterUser(user *User) *User {
 }
 
 func CheckUserCredentials(user **User) bool {
-	// Hashes the password and checks if it is in the database.
-	db := database.GetSqlConnection()
-	stmtOut, err := db.Prepare("SELECT id, password FROM User WHERE username = ?") // ? = placeholder
-	if err != nil {
+	usersListMap := database.SelectStatement(
+		"SELECT id, password FROM User WHERE username = ?",
+		(*user).Username,
+	)
+
+	// an error occurred or there was no user found
+	if usersListMap == nil {
 		return false
 	}
 
-	rows, err := stmtOut.Query((*user).Username)
-	if err != nil {
-		return false
-	}
-
-	// Get column names
-	columns, err := rows.Columns()
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
-	}
-
-	values := make([]sql.RawBytes, len(columns))
-
-	scanArgs := make([]interface{}, len(values))
-	for i := range values {
-		scanArgs[i] = &values[i]
-	}
-
-	// TODO make this a more generic method if there is another use case for multiple row fetching
-	// TODO find out if scan can directly set in a struct
-	for rows.Next() {
-		err = rows.Scan(scanArgs...)
-		if err != nil {
-			panic(err.Error()) // proper error handling instead of panic in your app
+	for _, userMap := range usersListMap {
+		id := userMap["id"]
+		if _, err := strconv.Atoi(id); err == nil {
+			// Sets the Id to the pointed argument. So when the function is done the receiver will also have the id of user.
+			(*user).Id, _ = strconv.ParseInt(id, 10, 64)
 		}
-
-		var value string
-		for i, col := range values {
-			if col != nil {
-				column := columns[i]
-
-				if column == "id" {
-					(*user).Id, err = strconv.ParseInt(string(col), 10, 64)
-				}
-
-				if column == "password" {
-					value = string(col)
-
-					// user was found with the correct password
-					if checkPasswordHash((*user).Password, value) {
-						return true
-					}
-				}
-			}
+		if checkPasswordHash((*user).password, userMap["password"]) {
+			return true
 		}
 	}
+
 	return false
 }
 

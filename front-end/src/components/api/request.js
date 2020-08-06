@@ -1,15 +1,14 @@
 import {getJWTKey} from "../auth/auth"
 
 
-// TODO maybe replace with a reverse proxy
+// TODO maybe replace with a reverse proxy like nginx
 const baseURL = "http://127.0.0.1:4000/api/"
-const baseHeaders = {
-    'Content-Type': 'application/json',
-}
 
 
-// Will only make json type of requests
-export async function post(endpoint, data) {
+function getHeaders() {
+    const baseHeaders = {
+        'Content-Type': 'application/json',
+    }
     // Needed for authorization
     let jwtToken = getJWTKey()
 
@@ -26,16 +25,25 @@ export async function post(endpoint, data) {
         }
     }
 
-    console.log(headers)
+    return headers
+}
+
+
+export async function get(endpoint) {
     const response = await fetch(baseURL + endpoint, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: new Headers(headers),
+        headers: new Headers(getHeaders()),
     })
 
     return await response.json()
 }
 
-export async function get(endpoint, data) {
-    // TODO implement
+// Will only make json type of requests
+export async function post(endpoint, data) {
+    const response = await fetch(baseURL + endpoint, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers(getHeaders()),
+    })
+
+    return await response.json()
 }
