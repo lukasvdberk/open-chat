@@ -2,7 +2,6 @@ package direct
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gofiber/fiber"
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/config"
@@ -36,21 +35,17 @@ func GetRoutes(app *fiber.App) *fiber.App {
 			jwtClaim := auth.GetJWTClaimsFromContext(c)
 
 			if jwtClaim != nil && friendUserId != 0 {
-				fmt.Println(jwtClaim.Id, friendUserId)
 				friendRelationId := friend.GetFriendRelation(jwtClaim.Id, friendUserId)
 
 				// -1 means not found. else it means they are not friend
 				if friendRelationId != -1 {
 					message := new(FriendMessage)
 
-					fromUser := new(auth.User)
-					fromUser.Id = jwtClaim.Id
-
 					friendRelation := new(friend.Friend)
 					friendRelation.Id = friendRelationId
 
 					message.FriendRelation = *friendRelation
-					message.FromUser = *fromUser
+					message.FromUser = jwtClaim.Id
 					message.ReadMessage = false
 					message.MessageContent = postData["messageContent"].(string)
 
@@ -88,7 +83,6 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		if _, err := strconv.Atoi(friendIdStr); err == nil {
 			friendId, _ := strconv.ParseInt(friendIdStr, 10, 64)
 
-			fmt.Println(friendId, auth.GetJWTClaimsFromContext(c).Id)
 			friendRelationId := friend.GetFriendRelation(friendId, auth.GetJWTClaimsFromContext(c).Id)
 
 			// -1 means not found

@@ -2,7 +2,6 @@ package direct
 
 import (
 	"errors"
-	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"github.com/lukasvdberk/opensource-discord/friend"
 	"strconv"
@@ -10,9 +9,10 @@ import (
 
 // this is the same as an dm
 type FriendMessage struct {
-	Id             int64         `json:"id"`
-	FromUser       auth.User     `json:"fromUser"`
-	FriendRelation friend.Friend `json:"friendRelation"`
+	Id int64 `json:"id"`
+	// Just the user id
+	FromUser       int64         `json:"fromUser"`
+	FriendRelation friend.Friend `json:"-"`
 	MessageContent string        `json:"messageContent"`
 	ReadMessage    bool          `json:"readMessage"`
 	// will be a timestamp
@@ -30,7 +30,7 @@ func SaveMessage(message FriendMessage) (FriendMessage, error) {
 	//@return bool returns if message was successfully saved.
 
 	messageId := database.InsertStatement("INSERT INTO FriendMessage VALUES(DEFAULT, ?, ?, ?, ?, NOW(), NULL);",
-		message.FromUser.Id,
+		message.FromUser,
 		message.FriendRelation.Id,
 		message.MessageContent,
 		message.ReadMessage,
@@ -62,7 +62,7 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 		fromUser := messageMap["id"]
 		if _, err := strconv.Atoi(fromUser); err == nil {
 			// maybe also add the other data such as username
-			message.FromUser.Id, _ = strconv.ParseInt(fromUser, 10, 64)
+			message.FromUser, _ = strconv.ParseInt(fromUser, 10, 64)
 		}
 
 		message.FriendRelation.Id = friendRelationId

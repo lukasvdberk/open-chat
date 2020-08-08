@@ -10,99 +10,52 @@
     let messages = [
         {
             "id": 14,
-            "fromUser": {
-                "id": 14,
-                "username": "",
-                "profilePhoto": ""
-            },
-            "friendRelation": {
-                "id": 3,
-                "user1": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                },
-                "user2": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                }
-            },
+            "fromUser": 14,
             "messageContent": "dikke paarden stront",
             "readMessage": false,
             "sentAt": 1596886503
         },
         {
             "id": 15,
-            "fromUser": {
-                "id": 15,
-                "username": "",
-                "profilePhoto": ""
-            },
-            "friendRelation": {
-                "id": 3,
-                "user1": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                },
-                "user2": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                }
-            },
+            "fromUser": 15,
             "messageContent": "dikke paarden stront",
             "readMessage": false,
             "sentAt": 1596886510
         },
         {
             "id": 16,
-            "fromUser": {
-                "id": 16,
-                "username": "",
-                "profilePhoto": ""
-            },
-            "friendRelation": {
-                "id": 3,
-                "user1": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                },
-                "user2": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                }
-            },
+            "fromUser": 16,
             "messageContent": "dikke paarden stront",
             "readMessage": false,
             "sentAt": 1596887152
         },
         {
             "id": 17,
-            "fromUser": {
-                "id": 17,
-                "username": "",
-                "profilePhoto": ""
-            },
-            "friendRelation": {
-                "id": 3,
-                "user1": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                },
-                "user2": {
-                    "id": 0,
-                    "username": "",
-                    "profilePhoto": ""
-                }
-            },
+            "fromUser": 17,
             "messageContent": "dikke paarden stront",
             "readMessage": false,
             "sentAt": 1596893510
+        },
+        {
+            "id": 20,
+            "fromUser": 20,
+            "messageContent": "dikke paarden stront",
+            "readMessage": false,
+            "sentAt": 1596899118
+        },
+        {
+            "id": 21,
+            "fromUser": 21,
+            "messageContent": "dikke paarden stront",
+            "readMessage": false,
+            "sentAt": 1596899127
+        },
+        {
+            "id": 22,
+            "fromUser": 22,
+            "messageContent": "dikke paarden stront",
+            "readMessage": false,
+            "sentAt": 1596899128
         }
     ]
 </script>
