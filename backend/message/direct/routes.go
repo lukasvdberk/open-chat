@@ -2,6 +2,7 @@ package direct
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gofiber/fiber"
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/config"
@@ -19,24 +20,33 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		//		messageContent: content as a string you wish to send.
 		postData := make(map[string]interface{})
 		err := json.Unmarshal([]byte(c.Body()), &postData)
-		var id, errParsingId = postData["friendUserId"].(int64)
 
-		if err == nil && !errParsingId {
-			friendUserId := id
+		// TODO this parsing could probably be done more cleanly
+		var friendUserId int64 = 0
+		var tmpVar float64
+		var parsed bool
+		tmpVar, parsed = postData["friendUserId"].(float64)
+
+		if parsed {
+			friendUserId = int64(int(tmpVar))
+		}
+
+		if err == nil && friendUserId != 0 {
 			jwtClaim := auth.GetJWTClaimsFromContext(c)
 
-			if jwtClaim != nil {
-				// TODO this currently will always return true. Actually implement the function.
-				if friend.IsUserFriend(jwtClaim.Id, friendUserId) {
+			if jwtClaim != nil && friendUserId != 0 {
+				fmt.Println(jwtClaim.Id, friendUserId)
+				friendRelationId := friend.GetFriendRelation(jwtClaim.Id, friendUserId)
+
+				// -1 means not found. else it means they are not friend
+				if friendRelationId != -1 {
 					message := new(FriendMessage)
 
 					fromUser := new(auth.User)
 					fromUser.Id = jwtClaim.Id
 
 					friendRelation := new(friend.Friend)
-
-					// TODO actually set the right id.
-					friendRelation.Id = 2
+					friendRelation.Id = friendRelationId
 
 					message.FriendRelation = *friendRelation
 					message.FromUser = *fromUser
@@ -50,15 +60,20 @@ func GetRoutes(app *fiber.App) *fiber.App {
 							"message": "successfully saved message",
 						}, c)
 					} else {
-						responses.ErrorResponse(1, fiber.Map{
+						responses.ErrorResponse(4, fiber.Map{
 							"errorMessage": "failed to save message",
 						}, c)
 					}
-
-					// TODO send message
+				} else {
+					responses.ErrorResponse(3, fiber.Map{
+						"errorMessage": "User is a not a friend of the submitted user id",
+					}, c)
 				}
+			} else {
+				responses.ErrorResponse(2, fiber.Map{
+					"errorMessage": "failed to retrieve one of the ids",
+				}, c)
 			}
-			// add message with timestamp.
 		} else {
 			responses.ErrorResponse(1, fiber.Map{
 				"errorMessage": "not a valid user id",

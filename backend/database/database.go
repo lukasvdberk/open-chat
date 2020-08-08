@@ -41,17 +41,21 @@ func SelectStatement(prepareStatement string, arguments ...interface{}) []map[st
 	stmtOut, err := db.Prepare(prepareStatement)
 
 	if err != nil {
+		fmt.Println("preparing statement")
 		return nil
 	}
 
 	rows, err := stmtOut.Query(arguments...)
+
 	if err != nil {
+		fmt.Println("querying statement")
 		return nil
 	}
 
 	// Get column names
 	columns, err := rows.Columns()
 	if err != nil {
+		fmt.Println("error columns statement")
 		return nil
 	}
 
@@ -68,6 +72,7 @@ func SelectStatement(prepareStatement string, arguments ...interface{}) []map[st
 	for rows.Next() {
 		err = rows.Scan(scanArgs...)
 		if err != nil {
+			fmt.Println("error scanning rows")
 			return nil
 		}
 		var value string

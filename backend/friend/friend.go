@@ -1,6 +1,7 @@
 package friend
 
 import (
+	"fmt"
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"strconv"
@@ -43,7 +44,22 @@ func GetFriendsByUserId(userId int64) []auth.User {
 	return friends
 }
 
-func IsUserFriend(userId1 int64, userId2 int64) bool {
-	// TODO implement for security reasons in messages.
-	return true
+func GetFriendRelation(userId1 int64, userId2 int64) int64 {
+	friendRelationResults := database.SelectStatement(
+		"SELECT id FROM Friend WHERE (user1 = ? AND user2 = ?) OR (user2 = ? AND user1 = ?)",
+		userId1, userId2, userId2, userId1,
+	)
+
+	if len(friendRelationResults) > 0 {
+		fmt.Println("found friend relation" + friendRelationResults[0]["id"])
+
+		friendRelationId := friendRelationResults[0]["id"]
+		if _, err := strconv.Atoi(friendRelationId); err == nil {
+			actualId, _ := strconv.ParseInt(friendRelationId, 10, 64)
+			return actualId
+		}
+	}
+
+	// -1 means not found or a error occurred.
+	return -1
 }
