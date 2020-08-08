@@ -5,9 +5,11 @@
 
 <style>
     img, div {
+        padding: 0;
+        margin: 0;
         display: inline-block;
-        height: 48px;
-        vertical-align: middle;
+        height: 30px;
+        width: auto;
     }
 </style>
 

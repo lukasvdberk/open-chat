@@ -5,59 +5,20 @@
     // TODO save received messages in stores
     import MessageList from "./MessageList.svelte";
     import SendMessage from "./SendMessage.svelte";
+    import {getFriendMessages} from "./direct-messages";
+    import {onMount} from "svelte";
 
-    // TODO replace with actual data
-    let messages = [
-        {
-            "id": 14,
-            "fromUser": 14,
-            "messageContent": "dikke paarden stront",
-            "readMessage": false,
-            "sentAt": 1596886503
-        },
-        {
-            "id": 15,
-            "fromUser": 15,
-            "messageContent": "dikke paarden stront",
-            "readMessage": false,
-            "sentAt": 1596886510
-        },
-        {
-            "id": 16,
-            "fromUser": 16,
-            "messageContent": "dikke paarden stront",
-            "readMessage": false,
-            "sentAt": 1596887152
-        },
-        {
-            "id": 17,
-            "fromUser": 17,
-            "messageContent": "dikke paarden stront",
-            "readMessage": false,
-            "sentAt": 1596893510
-        },
-        {
-            "id": 20,
-            "fromUser": 20,
-            "messageContent": "dikke paarden stront",
-            "readMessage": false,
-            "sentAt": 1596899118
-        },
-        {
-            "id": 21,
-            "fromUser": 21,
-            "messageContent": "dikke paarden stront",
-            "readMessage": false,
-            "sentAt": 1596899127
-        },
-        {
-            "id": 22,
-            "fromUser": 22,
-            "messageContent": "dikke paarden stront",
-            "readMessage": false,
-            "sentAt": 1596899128
+    let messages = []
+    onMount(async () => {
+        const response = await getFriendMessages(30)
+        if (response !== undefined) {
+            console.log("fetching messages")
+            messages = response.messages
+        } else {
+            console.log("failed to retrieve messages")
         }
-    ]
+    })
+    // TODO replace with actual data
 </script>
 
 <style>

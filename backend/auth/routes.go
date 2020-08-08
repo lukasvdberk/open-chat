@@ -38,6 +38,7 @@ func GetRoutes(app *fiber.App) *fiber.App {
 				token := jwt.New(jwt.SigningMethodHS256)
 				claims := token.Claims.(jwt.MapClaims)
 				claims["userId"] = user.Id
+				claims["username"] = user.Username
 				// Good for a month
 				claims["exp"] = time.Now().Add(time.Hour * 720).Unix()
 
@@ -52,7 +53,8 @@ func GetRoutes(app *fiber.App) *fiber.App {
 				}
 
 				responses.ErrorResponse(0, fiber.Map{
-					"token": t,
+					"token":  t,
+					"userId": user.Id,
 				}, c)
 			} else {
 				responses.ErrorResponse(2, fiber.Map{

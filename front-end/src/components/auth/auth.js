@@ -24,6 +24,8 @@ export async function login(username, password) {
     })
     if (result.code === 0) {
         saveJWTKey(result.content.token)
+        saveUserId(result.content.userId)
+        saveUsername(username)
         onAuthenticationStateChange.set(true)
     } else {
         return false
@@ -43,6 +45,23 @@ export function saveJWTKey(jwtToken) {
 export function getJWTKey() {
     return localStorage.getItem("jwtKey")
 }
+
+export function saveUsername(username) {
+    localStorage.setItem("username", username)
+}
+
+export function getUsername() {
+    return localStorage.getItem("username")
+}
+
+export function saveUserId(id) {
+    localStorage.setItem("id", id)
+}
+
+export function getUserId() {
+    return localStorage.getItem("id")
+}
+
 
 export async function renewKey() {
     // TODO implement

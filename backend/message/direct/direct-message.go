@@ -9,7 +9,7 @@ import (
 
 // this is the same as an dm
 type FriendMessage struct {
-	Id int64 `json:"id"`
+	Id int64 `json:"messageId"`
 	// Just the user id
 	FromUser       int64         `json:"fromUser"`
 	FriendRelation friend.Friend `json:"-"`
@@ -59,7 +59,7 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 			message.Id, _ = strconv.ParseInt(id, 10, 64)
 		}
 
-		fromUser := messageMap["id"]
+		fromUser := messageMap["fromUser"]
 		if _, err := strconv.Atoi(fromUser); err == nil {
 			// maybe also add the other data such as username
 			message.FromUser, _ = strconv.ParseInt(fromUser, 10, 64)

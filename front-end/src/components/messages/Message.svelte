@@ -5,25 +5,37 @@
     export let messageContent = ''
     export let timeStamp = ''
     export let hasRead = ''
-    // TODO probably refactor with something like small icon
+    // TODO add some prop to set whether it is this user or not
 </script>
 
 <style>
-    div {
-        padding: var(--rounding);
+    div.container {
         margin: var(--rounding);
         width: auto;
         height: auto;
-
+        padding: calc(var(--rounding)/2);
         background-color: var(--second-bg);
         border-radius: var(--rounding);
     }
 
-    span {
+    div.block {
+        display:inline-block;
+        padding: 0;
+        margin: 0;
+    }
 
+    p {
+        margin: 0;
+        padding: 0;
     }
 </style>
-<div>
-    <Icon src={profilePhoto} alt={username} />
-    <span>{messageContent}</span>
+
+<div class="container">
+    <div class="block">
+        <Icon src={profilePhoto} alt={username} />
+    </div>
+    <div class="block">
+        <b>{username}</b>
+        <p>{messageContent}</p>
+    </div>
 </div>

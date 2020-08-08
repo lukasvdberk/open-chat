@@ -1,6 +1,6 @@
 import {get} from "../api/request";
 
-async function getFriendMessages(userId) {
+export async function getFriendMessages(userId) {
     const response = await get(`messages/${userId}`)
 
     if(response.code === 0) {
@@ -9,6 +9,6 @@ async function getFriendMessages(userId) {
     return undefined
 }
 
-async function saveFriendMessage(userId) {
+export async function saveFriendMessage(userId) {
 
 }

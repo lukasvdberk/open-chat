@@ -1,4 +1,5 @@
 <script>
+    import Icon from "../common/img/Icon.svelte";
     export let username;
     export let profilePhoto;
     export let isActive = false;
@@ -12,23 +13,27 @@
         background-color: var(--second-bg);
     }
 
-    img, div {
-        height: 48px;
-        vertical-align: middle;
+    div:hover {
+        cursor: pointer;
     }
 
     .isActive {
         color: var(--opposite-text);
         background-color: var(--is-active) !important;
     }
+
+    span {
+        font-size: 22px;
+        vertical-align: top;
+    }
 </style>
 
 <div class:isActive>
     {#if profilePhoto !== ""}
-        <img src={profilePhoto} alt={username} />
+        <Icon src={profilePhoto} alt={username} />
     {:else}
         <!--   TODO replace stock image with custom own made image     -->
-        <img src="https://file.coffee/u/4SmZXSKoA.png" alt={username} />
+        <Icon src="https://file.coffee/u/4SmZXSKoA.png" alt={username} />
     {/if}
     <span class:isActive>{username}</span>
 </div>
