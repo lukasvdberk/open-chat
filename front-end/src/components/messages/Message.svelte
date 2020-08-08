@@ -1,5 +1,6 @@
 <script>
-    import Icon from "../common/img/Icon.svelte";
+    import ProfileIcon from "../common/img/ProfileIcon.svelte";
+
     export let username = ''
     export let profilePhoto = ''
     export let messageContent = ''
@@ -32,7 +33,7 @@
 
 <div class="container">
     <div class="block">
-        <Icon src={profilePhoto} alt={username} />
+        <ProfileIcon src={profilePhoto} alt={username} />
     </div>
     <div class="block">
         <b>{username}</b>

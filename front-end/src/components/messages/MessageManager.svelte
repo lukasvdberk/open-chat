@@ -1,24 +1,29 @@
 <script>
-    // TODO add handler for friend direct message on change
     // TODO add handler for when a user is visiting a channel of a server
 
     // TODO save received messages in stores
     import MessageList from "./MessageList.svelte";
     import SendMessage from "./SendMessage.svelte";
     import {getFriendMessages} from "./direct-messages";
-    import {onMount} from "svelte";
+    import {currentSelectedFriend} from "../friends/friends-store";
 
     let messages = []
-    onMount(async () => {
-        const response = await getFriendMessages(30)
-        if (response !== undefined) {
-            console.log("fetching messages")
-            messages = response.messages
-        } else {
-            console.log("failed to retrieve messages")
+
+    async function setMessages(currentFriend) {
+        if(currentFriend !== undefined) {
+            // TODO maybe also store messages in svelte stores.
+            const response = await getFriendMessages(currentFriend.id)
+            if (response !== undefined) {
+                messages = response.messages
+            } else {
+                console.log("failed to retrieve messages")
+            }
         }
-    })
-    // TODO replace with actual data
+    }
+
+    currentSelectedFriend.subscribe((newSelectedFriend => {
+        setMessages(newSelectedFriend).then
+    }))
 </script>
 
 <style>

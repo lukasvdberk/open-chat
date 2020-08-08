@@ -1,8 +1,39 @@
 <script>
     import Icon from "../common/img/Icon.svelte";
+    import {createEventDispatcher} from "svelte";
+    import {currentSelectedFriend} from "./friends-store";
+    import ProfileIcon from "../common/img/ProfileIcon.svelte";
+
+    export let id;
     export let username;
     export let profilePhoto;
     export let isActive = false;
+
+    let dispatch = createEventDispatcher();
+
+    function onFriendSelected() {
+        dispatch("friend-select", {
+            friend: {
+                id: id,
+                username: username,
+                profilePhoto: profilePhoto,
+            }
+        });
+    }
+
+    currentSelectedFriend.subscribe((newSelectedFriend => {
+        if (newSelectedFriend) {
+            if (newSelectedFriend.id === id) {
+                console.log(newSelectedFriend.id, id)
+                console.log("setting new active friend")
+                isActive = true
+            } else {
+                isActive = false
+            }
+        } else {
+            isActive = false
+        }
+    }))
 </script>
 
 <style>
@@ -28,12 +59,7 @@
     }
 </style>
 
-<div class:isActive>
-    {#if profilePhoto !== ""}
-        <Icon src={profilePhoto} alt={username} />
-    {:else}
-        <!--   TODO replace stock image with custom own made image     -->
-        <Icon src="https://file.coffee/u/4SmZXSKoA.png" alt={username} />
-    {/if}
+<div class:isActive on:click={onFriendSelected}>
+    <ProfileIcon src={profilePhoto} alt={username} />
     <span class:isActive>{username}</span>
 </div>
