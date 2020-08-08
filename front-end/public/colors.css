@@ -3,4 +3,6 @@
     --second-bg: white;
     --is-active: grey;
     --opposite-text: white;
+    --rounding: 8px;
+    --icon-height: 8px;
 }

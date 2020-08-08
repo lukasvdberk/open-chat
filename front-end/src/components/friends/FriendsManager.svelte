@@ -1,6 +1,6 @@
 <!-- Responsible for fetching and setting the data for the friends tab -->
 <script>
-import 1{onMount} from "svelte";
+    import {onMount} from "svelte";
     import {getFriends} from "./friends";
     import Friend from "./Friend.svelte";
 

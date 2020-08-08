@@ -68,6 +68,8 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 		message.FriendRelation.Id = friendRelationId
 		message.ReadMessage = false
 		message.SentAt = database.DateStringToTimeStamp(messageMap["sentAt"])
+		message.MessageContent = messageMap["messageContent"]
+
 		messages = append(messages, *message)
 	}
 

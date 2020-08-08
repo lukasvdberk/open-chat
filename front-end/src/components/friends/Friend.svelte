@@ -8,7 +8,7 @@
     div {
         position: relative;
         margin: 8px;
-        border-radius: 8px;
+        border-radius: var(--rounding);
         background-color: var(--second-bg);
     }
 

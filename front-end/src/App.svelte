@@ -3,6 +3,7 @@
     import LoginOrRegister from "./components/auth/LoginOrRegister.svelte";
     import {onAuthenticationStateChange} from "./components/auth/auth-store";
     import {isAuthenticated} from "./components/auth/auth";
+    import MessageManager from "./components/messages/MessageManager.svelte";
 
     let authenticated = isAuthenticated()
 
@@ -14,7 +15,18 @@
 
 <style>
     div {
-        max-width: 15%;
+        display: block;
+        height: 100vh;
+    }
+
+    div.friends {
+        width: 15%;
+        float: left;
+    }
+
+    div.messages {
+        width: 85%;
+        float: right;
     }
 </style>
 
@@ -22,9 +34,11 @@
     <LoginOrRegister />
 {:else}
     <main>
-        <!--  TODO replace with container manager  -->
-        <div>
+        <div class="friends">
             <FriendsManager />
+        </div>
+        <div class="messages">
+            <MessageManager />
         </div>
     </main>
 {/if}
