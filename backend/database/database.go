@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 )
 
 import _ "github.com/go-sql-driver/mysql"
 
+// This file contains various functions for retrieving data from the database and converting values.
 func GetSqlConnection() *sql.DB {
 	// Gets connection info from environment variables
 	dbHost := "tcp(db-mysql:3306)"
@@ -17,7 +19,7 @@ func GetSqlConnection() *sql.DB {
 
 	connectionString := user + ":" + password + "@" + dbHost + "/" + databaseName
 
-	db, err := sql.Open("mysql", connectionString)
+	db, err := sql.Open("mysql", connectionString+"?parseTime=true")
 
 	if err != nil {
 		fmt.Println(err)
@@ -80,7 +82,6 @@ func SelectStatement(prepareStatement string, arguments ...interface{}) []map[st
 			if col != nil {
 				column := columns[i]
 				value = string(col)
-
 				rowMap[column] = value
 			}
 		}
@@ -113,4 +114,15 @@ func InsertStatement(insertStatement string, arguments ...interface{}) int64 {
 	}
 
 	return id
+}
+
+func DateStringToTimeStamp(dateStr string) int64 {
+	layout := "2006-01-02T15:04:05Z07:00"
+	convertedTime, err := time.Parse(layout, dateStr)
+
+	if err != nil {
+		return -1
+	}
+
+	return convertedTime.Unix()
 }

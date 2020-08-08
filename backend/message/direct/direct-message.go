@@ -5,6 +5,7 @@ import (
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"github.com/lukasvdberk/opensource-discord/friend"
+	"strconv"
 )
 
 // this is the same as an dm
@@ -41,4 +42,34 @@ func SaveMessage(message FriendMessage) (FriendMessage, error) {
 	} else {
 		return message, errors.New("failed to save message to database")
 	}
+}
+
+func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
+	messagesListMap := database.SelectStatement("SELECT * FROM FriendMessage WHERE friendRelation = ? ORDER BY sentAt",
+		friendRelationId,
+	)
+
+	var messages []FriendMessage
+
+	for _, messageMap := range messagesListMap {
+		message := new(FriendMessage)
+
+		id := messageMap["id"]
+		if _, err := strconv.Atoi(id); err == nil {
+			message.Id, _ = strconv.ParseInt(id, 10, 64)
+		}
+
+		fromUser := messageMap["id"]
+		if _, err := strconv.Atoi(fromUser); err == nil {
+			// maybe also add the other data such as username
+			message.FromUser.Id, _ = strconv.ParseInt(fromUser, 10, 64)
+		}
+
+		message.FriendRelation.Id = friendRelationId
+		message.ReadMessage = false
+		message.SentAt = database.DateStringToTimeStamp(messageMap["sentAt"])
+		messages = append(messages, *message)
+	}
+
+	return messages
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/lukasvdberk/opensource-discord/config"
 	"github.com/lukasvdberk/opensource-discord/friend"
 	"github.com/lukasvdberk/opensource-discord/responses"
+	"strconv"
 )
 
 func GetRoutes(app *fiber.App) *fiber.App {
@@ -77,6 +78,32 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		} else {
 			responses.ErrorResponse(1, fiber.Map{
 				"errorMessage": "not a valid user id",
+			}, c)
+		}
+	})
+
+	// get messages for a conversation
+	app.Get(config.GetDefaultApiRoute()+"/messages/:friendId", func(c *fiber.Ctx) {
+		friendIdStr := c.Params("friendId")
+		if _, err := strconv.Atoi(friendIdStr); err == nil {
+			friendId, _ := strconv.ParseInt(friendIdStr, 10, 64)
+
+			fmt.Println(friendId, auth.GetJWTClaimsFromContext(c).Id)
+			friendRelationId := friend.GetFriendRelation(friendId, auth.GetJWTClaimsFromContext(c).Id)
+
+			// -1 means not found
+			if friendRelationId != -1 {
+				responses.SuccessResponse(fiber.Map{
+					"messages": GetMessagesFromFriend(friendRelationId),
+				}, c)
+			} else {
+				responses.ErrorResponse(1, fiber.Map{
+					"errorMessage": "friend id not found",
+				}, c)
+			}
+		} else {
+			responses.ErrorResponse(2, fiber.Map{
+				"errorMessage": "not a valid friend id",
 			}, c)
 		}
 	})
