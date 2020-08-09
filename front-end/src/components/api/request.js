@@ -1,9 +1,8 @@
 import {getJWTKey} from "../auth/auth"
-
+import {BASE_API_ENDPOINT} from "../../settings";
 
 // TODO maybe replace with a reverse proxy like nginx
-const baseURL = "http://127.0.0.1:4000/api/"
-
+// const baseURL = "http://127.0.0.1:4000/api/"
 
 function getHeaders() {
     const baseHeaders = {
@@ -30,7 +29,7 @@ function getHeaders() {
 
 
 export async function get(endpoint) {
-    const response = await fetch(baseURL + endpoint, {
+    const response = await fetch(BASE_API_ENDPOINT + endpoint, {
         headers: new Headers(getHeaders()),
     })
 
@@ -39,7 +38,7 @@ export async function get(endpoint) {
 
 // Will only make json type of requests
 export async function post(endpoint, data) {
-    const response = await fetch(baseURL + endpoint, {
+    const response = await fetch(BASE_API_ENDPOINT + endpoint, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: new Headers(getHeaders()),

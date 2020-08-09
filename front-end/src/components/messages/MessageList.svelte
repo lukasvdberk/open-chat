@@ -2,6 +2,8 @@
     import Message from "./Message.svelte";
     import {getUsername, getUserId} from "../auth/auth";
     import {currentSelectedFriend} from "../friends/friends-store";
+    import {afterUpdate, onMount} from "svelte";
+
     export let messages
 
     const thisClientUsername = getUsername()
@@ -31,12 +33,40 @@
     currentSelectedFriend.subscribe((newSelectedFriend => {
         selectedFriend = newSelectedFriend
     }))
+
+    // $: scrollToBottom(messages)
+
+    function scrollToBottom(messages) {
+        let messageContainer = document.getElementById("message-container")
+        console.log("scrolling")
+        if(document.getElementById("message-container")) {
+            // so it always scroll to the bottom
+            messageContainer.scrollTo({
+                left: 0,
+                top: messageContainer.scrollHeight,
+                behavior: "smooth"
+            });
+        }
+    }
+
+    afterUpdate(() => {
+        scrollToBottom(messages)
+    })
 </script>
 
-{#each messages as message}
-    <Message
-        username={getUsernameById(message.fromUser)}
-        profilePhoto={getProfilePhoto(message.fromUser)}
-        messageContent={message.messageContent}
-    />
-{/each}
+<style>
+    section {
+        overflow-y: scroll;
+        max-height: 100%;
+    }
+</style>
+
+<section id="message-container">
+    {#each messages as message}
+        <Message
+                username={getUsernameById(message.fromUser)}
+                profilePhoto={getProfilePhoto(message.fromUser)}
+                messageContent={message.messageContent}
+        />
+    {/each}
+</section>

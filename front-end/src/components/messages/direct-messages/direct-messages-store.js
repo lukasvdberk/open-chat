@@ -13,7 +13,7 @@ import {writable} from "svelte/store";
 //                 "sentAt": 0
 //            },
 //            {
-//                 "messageId": 36,
+//                 "messageId": 37,
 //                 "fromUser": 28,
 //                 "messageContent": "howdy",
 //                 "readMessage": true,
@@ -25,9 +25,7 @@ import {writable} from "svelte/store";
 export const directMessages = writable([]);
 
 export function saveMessageToStore(friendUserId, messageContent) {
-    // maybe refactor to separate file or to direct-messages-store.js
     directMessages.update((currentMessages) => {
-        console.log(currentMessages)
         if(currentMessages !== undefined) {
             // if it does not exist yet then we create it
             if(currentMessages[friendUserId] === undefined) {
@@ -39,7 +37,6 @@ export function saveMessageToStore(friendUserId, messageContent) {
             // here we add it to existing messages
             else {
                 // adds it to existing messages
-                // TODO refactor with push
                 currentMessages[friendUserId] = [...currentMessages[friendUserId], messageContent]
                 return currentMessages
             }

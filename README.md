@@ -27,6 +27,15 @@ MYSQL_PASSWORD=password
 JWT_SECRET=secret_key
 IS_LIVE=false
 ```
+
+
+The above settings are only for the backend. After that you need to add a setting.js in 
+front-end/src/settings.js with the following content.
+```js
+export const BASE_API_ENDPOINT="http://127.0.0.1:4000/api/"
+```
+If you host your api (the backend of this project) at a different url then change the url.
+
 To run this project make sure docker and docker-compose is installed.
 Simply then run:
 ```bash
