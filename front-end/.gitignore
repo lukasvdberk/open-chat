@@ -1,4 +1,4 @@
 /node_modules/
 /public/build/
-src/settings.js
+/src/settings.js
 .DS_Store
