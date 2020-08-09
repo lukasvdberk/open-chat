@@ -14,11 +14,14 @@
 </script>
 
 <style>
-    div {
+    main {
         display: block;
         height: 100vh;
     }
 
+    div {
+        height: 100%;
+    }
     div.friends {
         width: 15%;
         float: left;

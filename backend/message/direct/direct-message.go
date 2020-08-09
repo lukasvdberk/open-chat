@@ -21,7 +21,7 @@ type FriendMessage struct {
 	//File    	   int64         `json:"sentAt"`
 }
 
-func SaveMessage(message FriendMessage) (FriendMessage, error) {
+func SaveMessage(message *FriendMessage) (*FriendMessage, error) {
 	// Only requires the following information
 	// 		message.FromUser,
 	//		message.FriendRelation,
@@ -37,6 +37,15 @@ func SaveMessage(message FriendMessage) (FriendMessage, error) {
 	)
 
 	if messageId != -1 {
+		// TODO check whether you can directly fetch the created timestamp.
+		// to get the timestamp from the database. else it may not be accurate
+
+		// list of maps
+		createdMessage := database.SelectStatement("SELECT sentAt FROM FriendMessage WHERE id=? LIMIT 1", messageId)
+		if len(createdMessage) > 0 {
+			message.SentAt = database.DateStringToTimeStamp(createdMessage[0]["sentAt"])
+		}
+
 		message.Id = messageId
 		return message, nil
 	} else {
@@ -61,7 +70,7 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 
 		fromUser := messageMap["fromUser"]
 		if _, err := strconv.Atoi(fromUser); err == nil {
-			// maybe also add the other data such as username
+			// TODO maybe also add the other data such as username
 			message.FromUser, _ = strconv.ParseInt(fromUser, 10, 64)
 		}
 

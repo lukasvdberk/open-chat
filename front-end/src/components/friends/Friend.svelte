@@ -22,16 +22,11 @@
     }
 
     currentSelectedFriend.subscribe((newSelectedFriend => {
+        isActive = false
         if (newSelectedFriend) {
             if (newSelectedFriend.id === id) {
-                console.log(newSelectedFriend.id, id)
-                console.log("setting new active friend")
                 isActive = true
-            } else {
-                isActive = false
             }
-        } else {
-            isActive = false
         }
     }))
 </script>

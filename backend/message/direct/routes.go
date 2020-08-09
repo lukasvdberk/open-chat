@@ -49,11 +49,12 @@ func GetRoutes(app *fiber.App) *fiber.App {
 					message.ReadMessage = false
 					message.MessageContent = postData["messageContent"].(string)
 
-					_, err := SaveMessage(*message)
+					message, err = SaveMessage(message)
 
 					if err == nil {
 						responses.SuccessResponse(fiber.Map{
-							"message": "successfully saved message",
+							"message":        "successfully saved message",
+							"messageContent": message,
 						}, c)
 					} else {
 						responses.ErrorResponse(4, fiber.Map{

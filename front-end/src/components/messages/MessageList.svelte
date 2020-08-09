@@ -8,7 +8,7 @@
     const thisClientUserId = getUserId()
 
     let selectedFriend = undefined
-    console.log("current selected user",currentSelectedFriend)
+
     function getUsernameById(id) {
         // gets the username from this client
         if (thisClientUserId == id) {
@@ -21,6 +21,7 @@
     }
 
     function getProfilePhoto(id) {
+        // TODO refactor this method bc this is not what it is.
         if (thisClientUserId == id) {
             return "https://file.coffee/u/4SmZXSKoA.png"
         }

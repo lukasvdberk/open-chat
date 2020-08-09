@@ -1,7 +1,14 @@
 <script>
-    // TODO probably need a event listener so the parent container can get what is being typed
-    function onMessageSend(e) {
+    import {createEventDispatcher} from "svelte";
+
+    let dispatch = createEventDispatcher();
+
+    let messageContent = ''
+    function onMessageSend(ignored) {
+        dispatch("message-sent", {messageContent: messageContent})
+        messageContent = ""
     }
+
 </script>
 
 <style>
@@ -11,6 +18,7 @@
     }
 </style>
 
+
 <form on:submit|preventDefault="{onMessageSend}">
-    <input placeholder="type here to send a message" />
+    <input bind:value={messageContent} placeholder="type here to send a message" />
 </form>
