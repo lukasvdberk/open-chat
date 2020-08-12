@@ -26,8 +26,14 @@ MYSQL_USER=user
 MYSQL_PASSWORD=password
 JWT_SECRET=secret_key
 IS_LIVE=false
+WEB_PUSH_PUBLIC_KEY=key
+WEB_PUSH_PRIVATE_KEY=key
+WEB_PUSH_EMAIL=email entered on vapidkeys.com
 ```
 
+The web push keys are required for web notifications. These need to be of the VAPID spec.
+
+A tool to easily generate such keys like https://vapidkeys.com/
 
 The above settings are only for the backend. After that you need to add a setting.js in 
 front-end/src/settings.js with the following content.

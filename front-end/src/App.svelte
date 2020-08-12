@@ -4,13 +4,23 @@
     import {onAuthenticationStateChange} from "./components/auth/auth-store";
     import {isAuthenticated} from "./components/auth/auth";
     import MessageManager from "./components/messages/MessageManager.svelte";
+    import {registerDevice} from "./components/notifications/device";
+    import {setupNotificationListeners} from "./components/notifications/notification-listener";
 
     let authenticated = isAuthenticated()
 
     // So it will redirect if the user is not logged in
     onAuthenticationStateChange.subscribe((value => {
+        // register service worker. currently only needed for push notifications
+        if(value) {
+            registerDevice().then()
+            setupNotificationListeners()
+        }
         authenticated = value
     }))
+
+
+
 </script>
 
 <style>

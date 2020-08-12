@@ -7,10 +7,13 @@ import (
 	"github.com/lukasvdberk/opensource-discord/config"
 	"github.com/lukasvdberk/opensource-discord/friend"
 	"github.com/lukasvdberk/opensource-discord/responses"
+	web_notification "github.com/lukasvdberk/opensource-discord/web-notification"
 	"strconv"
 )
 
 func GetRoutes(app *fiber.App) *fiber.App {
+	// This the channel the server will set for direct-message notifications.
+	messageChannel := "direct-messages"
 	// All the routes for receiving for fetching and messages with friend (dms's not servers)
 
 	// Add message to conversation
@@ -52,6 +55,13 @@ func GetRoutes(app *fiber.App) *fiber.App {
 					message, err = SaveMessage(message)
 
 					if err == nil {
+						// Send push notification to other user
+
+						web_notification.PushNotificationToUser(friendUserId, web_notification.Notification{
+							Data:           message,
+							MessageChannel: messageChannel,
+						})
+
 						responses.SuccessResponse(fiber.Map{
 							"message":        "successfully saved message",
 							"messageContent": message,

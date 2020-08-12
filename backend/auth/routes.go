@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
@@ -28,8 +27,6 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		user.Username = userMap["username"]
 		user.password = userMap["password"]
 
-		fmt.Println(user.Username)
-		fmt.Println(user.password)
 		if user.password != "" && user.Username != "" {
 			// Also updates the user id so that is why we need to pass it as a pointer
 			isValidUser := CheckUserCredentials(&user)

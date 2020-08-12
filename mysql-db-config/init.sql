@@ -111,3 +111,14 @@ CREATE TABLE ServerUserInVoiceChannel
     FOREIGN KEY (serverVoiceChannel) REFERENCES ServerVoiceChannel(id),
     PRIMARY KEY (id)
 );
+
+CREATE TABLE NotificationDevice
+(
+    id INTEGER AUTO_INCREMENT,
+    userId INTEGER,
+    endpoint TEXT,
+    authKey  TEXT,
+    p256dh   TEXT,
+    FOREIGN KEY (userId) REFERENCES User(id),
+    PRIMARY KEY (id)
+);

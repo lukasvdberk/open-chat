@@ -38,7 +38,7 @@
 
     function scrollToBottom(messages) {
         let messageContainer = document.getElementById("message-container")
-        console.log("scrolling")
+
         if(document.getElementById("message-container")) {
             // so it always scroll to the bottom
             messageContainer.scrollTo({
@@ -62,11 +62,16 @@
 </style>
 
 <section id="message-container">
-    {#each messages as message}
-        <Message
-                username={getUsernameById(message.fromUser)}
-                profilePhoto={getProfilePhoto(message.fromUser)}
-                messageContent={message.messageContent}
-        />
-    {/each}
+    {#if messages.length !== 0}
+        {#each messages as message}
+            <Message
+                    username={getUsernameById(message.fromUser)}
+                    profilePhoto={getProfilePhoto(message.fromUser)}
+                    messageContent={message.messageContent}
+            />
+        {/each}
+    {:else}
+        <!--Make this message more beautiful-->
+        <p style="color: var(--opposite-text)">No messages yet. Be the first one to start a conversation by sending a message below</p>
+    {/if}
 </section>

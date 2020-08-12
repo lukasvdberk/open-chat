@@ -16,8 +16,6 @@
     let currentFriend = undefined
 
     async function setMessages(currentFriend) {
-        // TODO check whether there are already messages in the store
-
         if(currentFriend) {
             // means they are already messages for this channel and we dont need to fetch.
 
@@ -28,7 +26,12 @@
             else {
                 const response = await getFriendMessages(currentFriend.id)
                 if (response !== undefined) {
-                    saveMessagesToStore(currentFriend.id, response.messages)
+                    let messages = response.messages
+
+                    if(messages == null) {
+                        messages = []
+                    }
+                    saveMessagesToStore(currentFriend.id, messages)
                 } else {
                     console.log("failed to retrieve messages")
                 }

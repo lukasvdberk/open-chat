@@ -5,6 +5,7 @@ import (
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/friend"
 	"github.com/lukasvdberk/opensource-discord/message/direct"
+	web_notification "github.com/lukasvdberk/opensource-discord/web-notification"
 )
 
 func main() {
@@ -17,6 +18,8 @@ func main() {
 
 	// direct messages
 	app = direct.GetRoutes(app)
+	app = web_notification.GetRoutes(app)
+
 	app.Static("/", "./front-end-public")
 
 	_ = app.Listen("0.0.0.0:4000")
