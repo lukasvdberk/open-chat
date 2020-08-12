@@ -24,6 +24,22 @@ import {writable} from "svelte/store";
 //
 export const directMessages = writable([]);
 
+// Edge case for push notifications. When the channel is not filled with messages yet it will not fetch the latest messages.
+// DONT USE THIS EXCEPT IN A NOTIFICATION HANDLER
+export function addMessageIfChannelExits(friendUserId, messageContent) {
+    directMessages.update((currentMessages) => {
+        if(currentMessages !== undefined) {
+            // if it does not exist yet then we create it
+            if(currentMessages[friendUserId] !== undefined) {
+                // adds it to existing messages
+                currentMessages[friendUserId] = [...currentMessages[friendUserId], messageContent]
+                return currentMessages
+            }
+        }
+        return []
+    })
+}
+
 export function saveMessageToStore(friendUserId, messageContent) {
     directMessages.update((currentMessages) => {
         if(currentMessages !== undefined) {

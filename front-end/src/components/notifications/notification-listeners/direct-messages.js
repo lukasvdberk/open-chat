@@ -1,5 +1,9 @@
-import {saveMessageToStore} from "../../messages/direct-messages/direct-messages-store";
+import {addMessageIfChannelExits} from "../../messages/direct-messages/direct-messages-store";
 
 export function handleDirectMessageNotification(data) {
-    saveMessageToStore(data.fromUser, data)
+    const userId = data.fromUser
+
+    // If the current channel has no messages yet dont push the current message
+
+    addMessageIfChannelExits(userId, data)
 }
