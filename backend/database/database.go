@@ -88,7 +88,7 @@ func SelectStatement(prepareStatement string, arguments ...interface{}) []map[st
 		rowsMapped = append(rowsMapped, rowMap)
 	}
 
-	_ = db.Close()
+	defer db.Close()
 	return rowsMapped
 }
 
@@ -113,6 +113,7 @@ func InsertStatement(insertStatement string, arguments ...interface{}) int64 {
 		return -1
 	}
 
+	defer db.Close()
 	return id
 }
 

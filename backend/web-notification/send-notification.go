@@ -2,7 +2,6 @@ package web_notification
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/SherClockHolmes/webpush-go"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"os"
@@ -36,13 +35,11 @@ type Notification struct {
 func PushNotificationToUser(userId int64, notification Notification) bool {
 	// send notification
 
-	fmt.Println(userId)
 	webNotificationDeviceListMap := database.SelectStatement(
 		"SELECT * FROM NotificationDevice WHERE userId = ? LIMIT 1",
 		userId,
 	)
 
-	fmt.Println("parsed notification data", webNotificationDeviceListMap)
 	if len(webNotificationDeviceListMap) > 0 {
 		webNotificationDeviceMap := webNotificationDeviceListMap[0]
 		notificationDevice := new(NotificationDevice)
@@ -65,7 +62,6 @@ func PushNotificationToUser(userId int64, notification Notification) bool {
 		publicKey := os.Getenv("WEB_PUSH_PUBLIC_KEY")
 		privateKey := os.Getenv("WEB_PUSH_PRIVATE_KEY")
 
-		fmt.Println("parsed notification data", notificationDevice)
 		s := &webpush.Subscription{}
 		s.Endpoint = notificationDevice.endpoint
 		s.Keys.P256dh = notificationDevice.p256dh
@@ -89,7 +85,7 @@ func PushNotificationToUser(userId int64, notification Notification) bool {
 		}
 
 		defer resp.Body.Close()
-		fmt.Println("success sending push message")
+
 		return true
 	} else {
 		return false

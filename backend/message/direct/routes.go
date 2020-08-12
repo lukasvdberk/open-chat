@@ -64,7 +64,9 @@ func GetRoutes(app *fiber.App) *fiber.App {
 							Icon:           friendRelation.User1.ProfilePhoto,
 						}
 
-						web_notification.PushNotificationToUser(friendUserId, web_notification.Notification{
+						// TODO maybe execute this in a background job
+						// just wait with sending the message
+						defer web_notification.PushNotificationToUser(friendUserId, web_notification.Notification{
 							Data:                  message,
 							MessageChannel:        messageChannel,
 							NotificationPopUpData: popUpData,
