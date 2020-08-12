@@ -1,19 +1,32 @@
 
 self.addEventListener("push", e => {
-    const data = e.data.json();
+    clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+    }).then(function(windowClients) {
+        // This push the data to a existing window or when none available show a notification
+        const data = e.data.json();
+        const channel = new BroadcastChannel('sw-messages');
+        let clientIsVisible = false;
 
+        for (let i = 0; i < windowClients.length; i++) {
+            const windowClient = windowClients[i];
+            if (windowClient.visibilityState==="visible") {
+                clientIsVisible = true;
+                channel.postMessage({
+                    data: data
+                });
+            }
+        }
 
-    const channel = new BroadcastChannel('sw-messages');
-    // TODO check if active then either push a notification or push the data to a existing tab.
-    const hasActiveTab = false
-    clients.matchAll({includeUncontrolled: true, type: 'window'}).then((result) => {
-        console.log(result)
-        channel.postMessage({
-            data: data
-        });
-    })
-
-    self.registration.showNotification(data.title, {
-        body: data.messageContent,
+        if(!clientIsVisible) {
+            const popUpData = data.popUpData
+            self.registration.showNotification(
+                popUpData.title, {
+                    body: popUpData.messageContent,
+                    icon: popUpData.icon,
+                }
+            );
+        }
     });
 });

@@ -18,9 +18,16 @@ type NotificationDevice struct {
 	p256dh   string
 }
 
+type NotificationPopUpData struct {
+	Title          string `json:"title"`
+	MessageContent string `json:"messageContent"`
+	Icon           string `json:"icon"`
+}
+
 type Notification struct {
 	// add a notification popup data stream or something? with title message and icon.
-	Data interface{} `json:"data"`
+	Data                  interface{}           `json:"data"`
+	NotificationPopUpData NotificationPopUpData `json:"popUpData"`
 
 	// Channel should something like "direct-messages" so the friend end know what kinds of notification this is.
 	MessageChannel string `json:"messageChannel"`

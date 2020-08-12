@@ -57,9 +57,17 @@ func GetRoutes(app *fiber.App) *fiber.App {
 					if err == nil {
 						// Send push notification to other user
 
+						// TODO Fetch the right data
+						popUpData := web_notification.NotificationPopUpData{
+							Title:          friendRelation.User1.Username,
+							MessageContent: message.MessageContent,
+							Icon:           friendRelation.User1.ProfilePhoto,
+						}
+
 						web_notification.PushNotificationToUser(friendUserId, web_notification.Notification{
-							Data:           message,
-							MessageChannel: messageChannel,
+							Data:                  message,
+							MessageChannel:        messageChannel,
+							NotificationPopUpData: popUpData,
 						})
 
 						responses.SuccessResponse(fiber.Map{

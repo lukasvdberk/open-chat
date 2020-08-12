@@ -12,13 +12,9 @@ export function setupNotificationListeners() {
 
     const channel = new BroadcastChannel('sw-messages');
     channel.addEventListener('message', event => {
-        console.log(event.data)
-
         const data = event.data.data
         const messageChannel = data.messageChannel
         const listener = listeners[messageChannel]
-
-        console.log(messageChannel)
 
         if(listener !== undefined) {
             listener(data.data)
