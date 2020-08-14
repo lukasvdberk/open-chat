@@ -4,9 +4,11 @@
     export let username = ''
     export let profilePhoto = ''
     export let messageContent = ''
-
+    export let hasNotRead = false
     // is a unix timestamp
     export let sentAt = 0
+
+    console.log(hasNotRead)
     // TODO add some prop to set whether it is this user or not
 
     function getReadableDateTimeFromTimestamp(timestamp) {
@@ -20,6 +22,12 @@
         let sec = a.getSeconds();
         return  + hour + ':' + min + ':' + sec + ' ' + date + ' ' + month + ' ' + year;
     }
+
+    // After a couple of seconds just say he read it
+    if(hasNotRead) {
+        // TODO make this a fun animation
+        setTimeout(() => hasNotRead = false, 2000)
+    }
 </script>
 
 <style>
@@ -30,6 +38,10 @@
         padding: calc(var(--rounding)/2);
         background-color: var(--second-bg);
         border-radius: var(--rounding);
+    }
+
+    .hasNotRead {
+        background-color: var(--attention-color) !important;
     }
 
     div.img-block {
@@ -64,7 +76,7 @@
     }
 </style>
 
-<div class="container">
+<div class:hasNotRead class="container">
     <div class="block img-block">
         <ProfileIcon src={profilePhoto} alt={username} />
     </div>

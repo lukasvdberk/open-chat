@@ -1,7 +1,7 @@
 <!-- Responsible for fetching and setting the data for the friends tab -->
 <script>
     import {onMount} from "svelte";
-    import {getAmountOfNewMessages, getFriends, updateReadMessages} from "./friends";
+    import {getAmountOfNewMessages, getFriends} from "./friends";
     import Friend from "./Friend.svelte";
     import {currentSelectedFriend} from "./friends-store";
 
@@ -32,15 +32,11 @@
         currentSelectedFriend.set(friend)
 
         if(amountOfFriendsNewMessages[friend.id] >= 0) {
-            updateReadMessages(friend.id).then((result) => {
-                console.log("sdkjflaksdjflkasdlkfjklj")
-                friend.amountOfNewMessages = 0
-                friends.splice(friend, 1)
-                friend.isActive = true
+            friend.amountOfNewMessages = 0
+            friends.splice(friend, 1)
+            friend.isActive = true
 
-                console.log(friend)
-                friends = [...friends, friend]
-            })
+            friends = [...friends, friend]
         }
     }
 </script>

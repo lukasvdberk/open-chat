@@ -20,3 +20,9 @@ export async function sendFriendMessage(friendUserId, messageStr) {
     }
     return undefined
 }
+
+export async function updateReadMessages(friendUserId) {
+    const response = await get(`read_messages/${friendUserId}`)
+
+    return response.code === 0;
+}

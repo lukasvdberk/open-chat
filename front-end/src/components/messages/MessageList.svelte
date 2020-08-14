@@ -2,7 +2,7 @@
     import Message from "./Message.svelte";
     import {getUsername, getUserId} from "../auth/auth";
     import {currentSelectedFriend} from "../friends/friends-store";
-    import {afterUpdate, onMount} from "svelte";
+    import {afterUpdate} from "svelte";
 
     export let messages
 
@@ -69,7 +69,7 @@
                     profilePhoto={getProfilePhoto(message.fromUser)}
                     messageContent={message.messageContent}
                     sentAt={message.sentAt}
-                    hasRead={message}
+                    hasNotRead={!message.readMessage}
             />
         {/each}
     {:else}

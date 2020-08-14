@@ -76,7 +76,6 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 
 		message.FriendRelation.Id = friendRelationId
 
-		// TODO set the right condition
 		message.ReadMessage = messageMap["readMessage"] == "1"
 		message.SentAt = database.DateStringToTimeStamp(messageMap["sentAt"])
 		message.MessageContent = messageMap["messageContent"]

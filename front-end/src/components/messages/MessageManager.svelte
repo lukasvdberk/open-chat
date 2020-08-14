@@ -4,7 +4,7 @@
     // TODO save received messages in stores
     import MessageList from "./MessageList.svelte";
     import SendMessage from "./SendMessage.svelte";
-    import {getFriendMessages, sendFriendMessage} from "./direct-messages/direct-messages";
+    import {getFriendMessages, sendFriendMessage, updateReadMessages} from "./direct-messages/direct-messages";
     import {currentSelectedFriend} from "../friends/friends-store";
     import {directMessages, saveMessagesToStore, saveMessageToStore} from "./direct-messages/direct-messages-store";
 
@@ -57,13 +57,20 @@
 
     directMessages.subscribe((newMessages) => {
         allMessages = newMessages
-        setMessages(currentFriend)
+
+        if (currentFriend !== undefined) {
+            setMessages(currentFriend).then
+        }
     })
 
     // this will be triggered when user switches to another friend in the side pane
     currentSelectedFriend.subscribe((newSelectedFriend => {
         currentFriend = newSelectedFriend
-        setMessages(newSelectedFriend).then
+        setMessages(newSelectedFriend).then((result) => {
+            // He has retrieved and opened the messages we now update that he messages have been read.
+            updateReadMessages(currentFriend.id).then((result) => {
+            })
+        })
     }))
 </script>
 
