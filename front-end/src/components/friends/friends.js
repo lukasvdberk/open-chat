@@ -19,3 +19,9 @@ export async function getAmountOfNewMessages() {
     }
     return response.content.amountOfMessagesPerUserId
 }
+
+export async function updateReadMessages(friendUserId) {
+    const response = await get(`read_messages/${friendUserId}`)
+
+    return response.code === 0;
+}

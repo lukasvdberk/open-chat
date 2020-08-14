@@ -93,7 +93,8 @@ func GetAmountOfNewMessagesFromUser(userId int64) map[int64]int64 {
 		"SELECT Friend.user1, Friend.user2, COUNT(*) AS `amount_of_messages` "+
 			"FROM Friend "+
 			"JOIN FriendMessage ON Friend.id = FriendMessage.friendRelation "+
-			"WHERE Friend.user1 = ? OR Friend.user2 = ? GROUP BY Friend.id",
+			"WHERE (Friend.user1 = ? OR Friend.user2 = ?) AND readMessage = false "+
+			"GROUP BY Friend.id",
 		userId, userId,
 	)
 
@@ -134,4 +135,13 @@ func GetAmountOfNewMessagesFromUser(userId int64) map[int64]int64 {
 	}
 
 	return mapToReturn
+}
+
+// Sets all the message for a conversation to readMessage = true
+func ReadMessageAllMessages(friendRelationId int64) bool {
+	return database.UpdateStatement("UPDATE FriendMessage "+
+		"SET readMessage = true "+
+		"WHERE friendRelation = ?",
+		friendRelationId,
+	)
 }

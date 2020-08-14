@@ -117,6 +117,24 @@ func InsertStatement(insertStatement string, arguments ...interface{}) int64 {
 	return id
 }
 
+func UpdateStatement(insertStatement string, arguments ...interface{}) bool {
+	db := GetSqlConnection()
+	defer db.Close()
+
+	stmtIns, err := db.Prepare(insertStatement)
+
+	if err != nil {
+		return false
+	}
+
+	_, err = stmtIns.Exec(arguments...)
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+
 func DateStringToTimeStamp(dateStr string) int64 {
 	layout := "2006-01-02T15:04:05Z07:00"
 	convertedTime, err := time.Parse(layout, dateStr)

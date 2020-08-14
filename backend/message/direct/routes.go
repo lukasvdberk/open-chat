@@ -98,7 +98,8 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		}
 	})
 
-	// get messages for a conversation
+	// get messages for a convers
+	//ation
 	app.Get(config.GetDefaultApiRoute()+"/messages/:friendId", func(c *fiber.Ctx) {
 		friendIdStr := c.Params("friendId")
 		if _, err := strconv.Atoi(friendIdStr); err == nil {
@@ -131,6 +132,40 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		responses.SuccessResponse(fiber.Map{
 			"amountOfMessagesPerUserId": GetAmountOfNewMessagesFromUser(userId),
 		}, c)
+	})
+
+	app.Get(config.GetDefaultApiRoute()+"/read_messages/:friendId", func(c *fiber.Ctx) {
+		// Returns a dict of how many new messages a user has for each friend id.
+		userId := auth.GetJWTClaimsFromContext(c).Id
+		friendIdStr := c.Params("friendId")
+		if _, err := strconv.Atoi(friendIdStr); err == nil {
+			friendId, _ := strconv.ParseInt(friendIdStr, 10, 64)
+
+			friendRelationId := friend.GetFriendRelation(userId, friendId)
+
+			// -1 means not found
+			if friendRelationId != -1 {
+				success := ReadMessageAllMessages(friendRelationId)
+
+				if success {
+					responses.SuccessResponse(fiber.Map{
+						"message": "Updated read message status!",
+					}, c)
+				} else {
+					responses.ErrorResponse(3, fiber.Map{
+						"errorMessage": "failed to update database",
+					}, c)
+				}
+			} else {
+				responses.ErrorResponse(2, fiber.Map{
+					"errorMessage": "Did not find friend relation. Seems they are not friends.",
+				}, c)
+			}
+		} else {
+			responses.ErrorResponse(1, fiber.Map{
+				"errorMessage": "not a valid friend id",
+			}, c)
+		}
 	})
 
 	return app

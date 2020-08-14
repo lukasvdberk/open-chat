@@ -1,27 +1,26 @@
 <!-- Responsible for fetching and setting the data for the friends tab -->
 <script>
     import {onMount} from "svelte";
-    import {getAmountOfNewMessages, getFriends} from "./friends";
+    import {getAmountOfNewMessages, getFriends, updateReadMessages} from "./friends";
     import Friend from "./Friend.svelte";
     import {currentSelectedFriend} from "./friends-store";
 
 
     let friends = []
+    let amountOfFriendsNewMessages = {}
+
     onMount(async () => {
         let tmpFriends = await getFriends()
-        let amountOfFriendsNewMessages = await getAmountOfNewMessages()
+        amountOfFriendsNewMessages = await getAmountOfNewMessages()
 
         if(amountOfFriendsNewMessages !== undefined) {
-            console.log(amountOfFriendsNewMessages)
             tmpFriends.forEach((friend) => {
                 friend.amountOfNewMessages = amountOfFriendsNewMessages[friend.id]
 
-                console.log(friend.amountOfNewMessages)
                 if(!friend.amountOfNewMessages) {
                     friend.amountOfNewMessages = 0
                 }
             })
-            console.log('done')
             friends = tmpFriends
         }
 
@@ -29,9 +28,20 @@
 
     function onFriendSelected(event) {
         const friend = event.detail.friend
-
         // up date the store so other components can react to it
         currentSelectedFriend.set(friend)
+
+        if(amountOfFriendsNewMessages[friend.id]) {
+            updateReadMessages(friend.id).then((result) => {
+                console.log("sdkjflaksdjflkasdlkfjklj")
+                friend.amountOfNewMessages = 0
+                friends.splice(friend, 1)
+                friend.isActive = true
+
+                console.log(friend)
+                friends = [...friends, friend]
+            })
+        }
     }
 </script>
 
