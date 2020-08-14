@@ -60,3 +60,21 @@ func GetFriendRelation(userId1 int64, userId2 int64) int64 {
 	// -1 means not found or a error occurred.
 	return -1
 }
+
+func GetFriendsRelationsFromUserId(userId int64) []int64 {
+	friendRelationResultsListMap := database.SelectStatement(
+		"SELECT id FROM Friend WHERE user1 = ? OR user2 = ?",
+		userId, userId,
+	)
+
+	var friendRelationIds []int64
+	for _, friendRelationMap := range friendRelationResultsListMap {
+		idStr := friendRelationMap["id"]
+		if _, err := strconv.Atoi(idStr); err == nil {
+			actualId, _ := strconv.ParseInt(idStr, 10, 64)
+			friendRelationIds = append(friendRelationIds, actualId)
+		}
+	}
+
+	return friendRelationIds
+}

@@ -75,7 +75,9 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 		}
 
 		message.FriendRelation.Id = friendRelationId
-		message.ReadMessage = false
+
+		// TODO set the right condition
+		message.ReadMessage = messageMap["readMessage"] == "1"
 		message.SentAt = database.DateStringToTimeStamp(messageMap["sentAt"])
 		message.MessageContent = messageMap["messageContent"]
 
@@ -83,4 +85,35 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 	}
 
 	return messages
+}
+
+// Returns a map of the friendId as key and how many new messages there are as value
+func GetAmountOfNewMessagesFromUser(userId int64) map[int64]int64 {
+	amountOfMessagesPerFriend := database.SelectStatement("SELECT Friend.id, COUNT(*) AS `amount_of_messages` "+
+		"FROM Friend "+
+		"JOIN FriendMessage ON Friend.id = FriendMessage.friendRelation "+
+		"WHERE Friend.user1 = ? OR Friend.user2 = ? GROUP BY Friend.id",
+		userId, userId,
+	)
+
+	mapToReturn := make(map[int64]int64)
+	for _, friendAmountMessages := range amountOfMessagesPerFriend {
+		var id int64 = -1
+		idStr := friendAmountMessages["id"]
+		if _, err := strconv.Atoi(idStr); err == nil {
+			id, _ = strconv.ParseInt(idStr, 10, 64)
+		}
+
+		var amountOfMessages int64 = -1
+		amountOfMessagesStr := friendAmountMessages["amount_of_messages"]
+		if _, err := strconv.Atoi(amountOfMessagesStr); err == nil {
+			amountOfMessages, _ = strconv.ParseInt(amountOfMessagesStr, 10, 64)
+		}
+
+		if amountOfMessages != -1 && id != -1 {
+			mapToReturn[id] = amountOfMessages
+		}
+	}
+
+	return mapToReturn
 }

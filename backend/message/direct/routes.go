@@ -123,5 +123,15 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		}
 	})
 
+	app.Get(config.GetDefaultApiRoute()+"/amount_of_new_messages/", func(c *fiber.Ctx) {
+		// Returns a dict of how many new messages a user has for each friend id.
+		userId := auth.GetJWTClaimsFromContext(c).Id
+
+		// TODO actually give back a list
+		responses.SuccessResponse(fiber.Map{
+			"amountOfMessagesPerUserId": GetAmountOfNewMessagesFromUser(userId),
+		}, c)
+	})
+
 	return app
 }
