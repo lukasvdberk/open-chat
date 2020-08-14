@@ -1,5 +1,4 @@
 <script>
-    import Icon from "../common/img/Icon.svelte";
     import {createEventDispatcher} from "svelte";
     import {currentSelectedFriend} from "./friends-store";
     import ProfileIcon from "../common/img/ProfileIcon.svelte";
@@ -52,9 +51,30 @@
         font-size: 22px;
         vertical-align: top;
     }
+
+    section.messages {
+        display: block;
+        position: absolute;
+        top: 40%;
+        left: 85%;
+        height: 25px;
+        width: 25px;
+        border-radius: 25px;
+        background-color: var(--attention-color);
+        z-index: 2;
+        text-align: center;
+    }
+
+    section > span {
+        color: var(--opposite-text);
+        font-size: 25px;
+    }
 </style>
 
 <div class:isActive on:click={onFriendSelected}>
     <ProfileIcon src={profilePhoto} alt={username} />
     <span class:isActive>{username}</span>
+    <section class="messages">
+        <span>5</span>
+    </section>
 </div>
