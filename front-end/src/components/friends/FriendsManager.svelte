@@ -31,7 +31,7 @@
         // up date the store so other components can react to it
         currentSelectedFriend.set(friend)
 
-        if(amountOfFriendsNewMessages[friend.id]) {
+        if(amountOfFriendsNewMessages[friend.id] >= 0) {
             updateReadMessages(friend.id).then((result) => {
                 console.log("sdkjflaksdjflkasdlkfjklj")
                 friend.amountOfNewMessages = 0
@@ -55,7 +55,7 @@
     <!-- List of friends   -->
     {#each friends as friend}
         <Friend
-            id="{friend.id}"
+            id={friend.id}
             username={friend.username}
             profilePhoto={friend.profilePhoto}
             isActive={friend.isActive}

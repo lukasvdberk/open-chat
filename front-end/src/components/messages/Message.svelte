@@ -4,9 +4,22 @@
     export let username = ''
     export let profilePhoto = ''
     export let messageContent = ''
-    export let timeStamp = ''
-    export let hasRead = ''
+
+    // is a unix timestamp
+    export let sentAt = 0
     // TODO add some prop to set whether it is this user or not
+
+    function getReadableDateTimeFromTimestamp(timestamp) {
+        let a = new Date(timestamp * 1000);
+        let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        let year = a.getFullYear();
+        let month = months[a.getMonth()];
+        let date = a.getDate();
+        let hour = a.getHours();
+        let min = a.getMinutes();
+        let sec = a.getSeconds();
+        return  + hour + ':' + min + ':' + sec + ' ' + date + ' ' + month + ' ' + year;
+    }
 </script>
 
 <style>
@@ -19,24 +32,46 @@
         border-radius: var(--rounding);
     }
 
+    div.img-block {
+        width: 30px !important;
+        vertical-align: top;
+        height: auto;
+    }
+
     div.block {
         display:inline-block;
         padding: 0;
         margin: 0;
+        width: calc(100% - 40px);
+    }
+
+    div.block > * {
+        display: block;
+    }
+
+    div.img-block > * {
+        vertical-align: text-top;
     }
 
     p {
         margin: 0;
         padding: 0;
     }
+
+    i, b {
+        display: inline-block;
+        float: left;
+    }
 </style>
 
 <div class="container">
-    <div class="block">
+    <div class="block img-block">
         <ProfileIcon src={profilePhoto} alt={username} />
     </div>
     <div class="block">
         <b>{username}</b>
+        <i>   - received at: {getReadableDateTimeFromTimestamp(sentAt)}</i>
+        <br>
         <p>{messageContent}</p>
     </div>
 </div>

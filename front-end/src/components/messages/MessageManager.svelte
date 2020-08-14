@@ -31,6 +31,7 @@
                     if(messages == null) {
                         messages = []
                     }
+                    console.log(messages)
                     saveMessagesToStore(currentFriend.id, messages)
                 } else {
                     console.log("failed to retrieve messages")

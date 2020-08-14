@@ -68,6 +68,8 @@
                     username={getUsernameById(message.fromUser)}
                     profilePhoto={getProfilePhoto(message.fromUser)}
                     messageContent={message.messageContent}
+                    sentAt={message.sentAt}
+                    hasRead={message}
             />
         {/each}
     {:else}
