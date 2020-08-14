@@ -10,3 +10,12 @@ export async function getFriends() {
     }
     return response.content.friends
 }
+
+export async function getAmountOfNewMessages() {
+    const response = await get("amount_of_new_messages")
+
+    if (response.code !== 0) {
+        return undefined
+    }
+    return response.content.amountOfMessagesPerUserId
+}

@@ -7,6 +7,7 @@
     export let username;
     export let profilePhoto;
     export let isActive = false;
+    export let amountOfNewMessages = 0
 
     let dispatch = createEventDispatcher();
 
@@ -56,7 +57,7 @@
         display: block;
         position: absolute;
         top: 40%;
-        left: 85%;
+        left: 92%;
         height: 25px;
         width: 25px;
         border-radius: 25px;
@@ -67,14 +68,17 @@
 
     section > span {
         color: var(--opposite-text);
-        font-size: 25px;
+        font-size: 20px;
     }
 </style>
 
 <div class:isActive on:click={onFriendSelected}>
     <ProfileIcon src={profilePhoto} alt={username} />
     <span class:isActive>{username}</span>
-    <section class="messages">
-        <span>5</span>
-    </section>
+
+    {#if amountOfNewMessages !== 0}
+        <section class="messages">
+            <span>{amountOfNewMessages}</span>
+        </section>
+    {/if}
 </div>

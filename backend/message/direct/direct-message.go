@@ -89,19 +89,37 @@ func GetMessagesFromFriend(friendRelationId int64) []FriendMessage {
 
 // Returns a map of the friendId as key and how many new messages there are as value
 func GetAmountOfNewMessagesFromUser(userId int64) map[int64]int64 {
-	amountOfMessagesPerFriend := database.SelectStatement("SELECT Friend.id, COUNT(*) AS `amount_of_messages` "+
-		"FROM Friend "+
-		"JOIN FriendMessage ON Friend.id = FriendMessage.friendRelation "+
-		"WHERE Friend.user1 = ? OR Friend.user2 = ? GROUP BY Friend.id",
+	amountOfMessagesPerFriend := database.SelectStatement(
+		"SELECT Friend.user1, Friend.user2, COUNT(*) AS `amount_of_messages` "+
+			"FROM Friend "+
+			"JOIN FriendMessage ON Friend.id = FriendMessage.friendRelation "+
+			"WHERE Friend.user1 = ? OR Friend.user2 = ? GROUP BY Friend.id",
 		userId, userId,
 	)
 
 	mapToReturn := make(map[int64]int64)
 	for _, friendAmountMessages := range amountOfMessagesPerFriend {
-		var id int64 = -1
-		idStr := friendAmountMessages["id"]
-		if _, err := strconv.Atoi(idStr); err == nil {
-			id, _ = strconv.ParseInt(idStr, 10, 64)
+		var friendId int64 = -1
+
+		// TODO this userId could be cleaner parsed in a separate function
+		var user1Id int64 = -1
+		user1Str := friendAmountMessages["user1"]
+		if _, err := strconv.Atoi(user1Str); err == nil {
+			user1Id, _ = strconv.ParseInt(user1Str, 10, 64)
+		}
+
+		var user2Id int64 = -1
+		user2Str := friendAmountMessages["user2"]
+		if _, err := strconv.Atoi(user2Str); err == nil {
+			user2Id, _ = strconv.ParseInt(user2Str, 10, 64)
+		}
+
+		if user1Id != userId {
+			friendId = user1Id
+		}
+
+		if user2Id != userId {
+			friendId = user2Id
 		}
 
 		var amountOfMessages int64 = -1
@@ -110,8 +128,8 @@ func GetAmountOfNewMessagesFromUser(userId int64) map[int64]int64 {
 			amountOfMessages, _ = strconv.ParseInt(amountOfMessagesStr, 10, 64)
 		}
 
-		if amountOfMessages != -1 && id != -1 {
-			mapToReturn[id] = amountOfMessages
+		if amountOfMessages != -1 && friendId != -1 {
+			mapToReturn[friendId] = amountOfMessages
 		}
 	}
 
