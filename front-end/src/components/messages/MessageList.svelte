@@ -2,7 +2,7 @@
     import Message from "./Message.svelte";
     import {getUsername, getUserId} from "../auth/auth";
     import {currentSelectedFriend} from "../friends/friends-store";
-    import {afterUpdate} from "svelte";
+    import {afterUpdate, createEventDispatcher, onMount} from "svelte";
 
     export let messages
 
@@ -10,6 +10,13 @@
     const thisClientUserId = getUserId()
 
     let selectedFriend = undefined
+
+    let dispatch = createEventDispatcher();
+
+    function onReachedTop(ignored) {
+        dispatch("reached-top")
+    }
+
 
     function getUsernameById(id) {
         // gets the username from this client
@@ -19,6 +26,7 @@
             if(selectedFriend !== undefined) {
                 return selectedFriend.username
             }
+            return 'Could not get username'
         }
     }
 
@@ -34,10 +42,12 @@
         selectedFriend = newSelectedFriend
     }))
 
-    // $: scrollToBottom(messages)
+    function getMessageContainer() {
+        return document.getElementById("message-container")
+    }
 
-    function scrollToBottom(messages) {
-        let messageContainer = document.getElementById("message-container")
+    function scrollToBottom() {
+        let messageContainer = getMessageContainer()
 
         if(document.getElementById("message-container")) {
             // so it always scroll to the bottom
@@ -49,8 +59,15 @@
         }
     }
 
+    function onScroll(event) {
+        if(event.target.scrollTop === 0) {
+            // then we reached the top of the page and need to fetch new messages.
+            onReachedTop()
+        }
+    }
+
     afterUpdate(() => {
-        scrollToBottom(messages)
+        scrollToBottom()
     })
 </script>
 
@@ -61,7 +78,7 @@
     }
 </style>
 
-<section id="message-container">
+<section id="message-container" on:scroll={onScroll}>
     {#if messages.length !== 0}
         {#each messages as message}
             <Message

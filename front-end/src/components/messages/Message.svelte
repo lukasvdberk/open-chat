@@ -8,7 +8,6 @@
     // is a unix timestamp
     export let sentAt = 0
 
-    console.log(hasNotRead)
     // TODO add some prop to set whether it is this user or not
 
     function getReadableDateTimeFromTimestamp(timestamp) {

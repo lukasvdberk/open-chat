@@ -71,7 +71,7 @@ export function saveMessagesToStore(friendUserId, messages) {
             }
             // here we add it to existing messages
             else {
-                currentMessages[friendUserId] = currentMessages.concat(messages)
+                currentMessages[friendUserId] = currentMessages[friendUserId].concat(messages)
                 return currentMessages
             }
         }

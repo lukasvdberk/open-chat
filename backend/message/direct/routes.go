@@ -98,10 +98,14 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		}
 	})
 
-	// get messages for a convers
-	//ation
-	app.Get(config.GetDefaultApiRoute()+"/messages/:friendId", func(c *fiber.Ctx) {
+	// get messages for a conversation
+	app.Get(config.GetDefaultApiRoute()+"/messages/:friendId/:fromTimestamp", func(c *fiber.Ctx) {
+
 		friendIdStr := c.Params("friendId")
+
+		// is a optional parameter
+		lastMessageTimestamp := c.Params("fromTimestamp")
+
 		if _, err := strconv.Atoi(friendIdStr); err == nil {
 			friendId, _ := strconv.ParseInt(friendIdStr, 10, 64)
 
@@ -109,9 +113,18 @@ func GetRoutes(app *fiber.App) *fiber.App {
 
 			// -1 means not found
 			if friendRelationId != -1 {
-				responses.SuccessResponse(fiber.Map{
-					"messages": GetMessagesFromFriend(friendRelationId),
-				}, c)
+
+				if _, err := strconv.Atoi(lastMessageTimestamp); err == nil {
+					// With this timestamp we can fetch messages starting from that timestamp.
+					lastMessageTimestamp, _ := strconv.ParseInt(lastMessageTimestamp, 10, 64)
+					responses.SuccessResponse(fiber.Map{
+						"messages": GetMessagesFromFriend(friendRelationId, lastMessageTimestamp),
+					}, c)
+				} else {
+					responses.SuccessResponse(fiber.Map{
+						"messages": GetMessagesFromFriend(friendRelationId, -1),
+					}, c)
+				}
 			} else {
 				responses.ErrorResponse(1, fiber.Map{
 					"errorMessage": "friend id not found",
