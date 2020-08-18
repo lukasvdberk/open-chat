@@ -3,8 +3,8 @@ The front-end of the open source discord written in svelte.
 
 ###Notes
 
-####Colours
-All colours use must be defined in css variables. Set the color variables in public/colors.css
+####Css variables
+All colours or general information use must be defined in css variables. Set the variables in public/vars.css
 
 
 ####Requests

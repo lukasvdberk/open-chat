@@ -2,6 +2,7 @@ package direct
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gofiber/fiber"
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/config"
@@ -57,11 +58,13 @@ func GetRoutes(app *fiber.App) *fiber.App {
 					if err == nil {
 						// Send push notification to other user
 
-						// TODO Fetch the right data
+						userData := auth.GetUserById(jwtClaim.Id)
+
+						fmt.Println(userData)
 						popUpData := web_notification.NotificationPopUpData{
-							Title:          friendRelation.User1.Username,
+							Title:          userData.Username,
 							MessageContent: message.MessageContent,
-							Icon:           friendRelation.User1.ProfilePhoto,
+							Icon:           userData.ProfilePhoto,
 						}
 
 						// TODO maybe execute this in a background job

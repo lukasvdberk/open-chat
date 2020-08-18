@@ -21,10 +21,15 @@ self.addEventListener("push", e => {
 
         if(!clientIsVisible) {
             const popUpData = data.popUpData
+            let icon = popUpData.icon
+
+            if(!icon) {
+                icon = "https://file.coffee/u/4SmZXSKoA.png"
+            }
             self.registration.showNotification(
                 popUpData.title, {
                     body: popUpData.messageContent,
-                    icon: popUpData.icon,
+                    icon: icon,
                 }
             );
         }
