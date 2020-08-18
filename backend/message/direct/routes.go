@@ -2,7 +2,6 @@ package direct
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gofiber/fiber"
 	"github.com/lukasvdberk/opensource-discord/auth"
 	"github.com/lukasvdberk/opensource-discord/config"
@@ -60,7 +59,6 @@ func GetRoutes(app *fiber.App) *fiber.App {
 
 						userData := auth.GetUserById(jwtClaim.Id)
 
-						fmt.Println(userData)
 						popUpData := web_notification.NotificationPopUpData{
 							Title:          userData.Username,
 							MessageContent: message.MessageContent,

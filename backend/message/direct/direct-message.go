@@ -2,7 +2,6 @@ package direct
 
 import (
 	"errors"
-	"fmt"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"github.com/lukasvdberk/opensource-discord/friend"
 	"strconv"
@@ -108,7 +107,6 @@ func GetAmountOfNewMessagesFromUser(userId int64) map[int64]int64 {
 		userId, userId, userId,
 	)
 
-	fmt.Println(amountOfMessagesPerFriend)
 	mapToReturn := make(map[int64]int64)
 	for _, friendAmountMessages := range amountOfMessagesPerFriend {
 		var friendId int64 = -1
