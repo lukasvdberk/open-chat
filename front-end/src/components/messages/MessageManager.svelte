@@ -19,6 +19,7 @@
     // only messages from a specific channel.
     let channelMessages = []
     let currentFriend = undefined
+    let noNewMessages = false
 
     function sortMessagesByTimestamp(messageList) {
         const sortByTimestamp = (first, second) => {
@@ -83,7 +84,16 @@
                     messages = []
                 }
 
-                saveMessagesToStore(currentFriend.id, messages)
+                // means there were no new messages to fetch
+                if(messages.length !== 0) {
+                    saveMessagesToStore(currentFriend.id, messages)
+                }
+                else {
+                    noNewMessages = true
+
+                    // so the message wont be in the way
+                    setTimeout(() => noNewMessages = false, 2000)
+                }
             } else {
                 console.log("failed to retrieve messages")
             }
@@ -118,9 +128,16 @@
     div.send-message {
         height: 5%;
     }
+
+    p {
+        color: var(--opposite-text)
+    }
 </style>
 
 <div class="message-manager">
+    {#if noNewMessages}
+        <p>No new messages to get. These are all the messages there are!</p>
+    {/if}
     <MessageList
         messages={channelMessages}
         on:reached-top={onReachedTop}

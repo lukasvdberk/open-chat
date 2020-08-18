@@ -2,7 +2,7 @@
     import Message from "./Message.svelte";
     import {getUsername, getUserId} from "../auth/auth";
     import {currentSelectedFriend} from "../friends/friends-store";
-    import {afterUpdate, createEventDispatcher, onMount} from "svelte";
+    import {afterUpdate, beforeUpdate, createEventDispatcher, onMount} from "svelte";
 
     export let messages
 
@@ -10,6 +10,7 @@
     const thisClientUserId = getUserId()
 
     let selectedFriend = undefined
+    let noNewMessages = false
 
     let dispatch = createEventDispatcher();
 
@@ -66,8 +67,20 @@
         }
     }
 
+    let oldMessageSize = 0
     afterUpdate(() => {
-        scrollToBottom()
+        const currentLength = messages.length
+
+        if(oldMessageSize === 0) {
+            scrollToBottom()
+        }
+
+        // If there was 1 message added we want to show it by scrolling to the bottom.
+        if(oldMessageSize + 1 === currentLength) {
+            scrollToBottom()
+        }
+
+        oldMessageSize = messages.length
     })
 </script>
 
@@ -75,6 +88,10 @@
     section {
         overflow-y: scroll;
         max-height: 100%;
+    }
+
+    p {
+        color: var(--opposite-text)
     }
 </style>
 
@@ -90,7 +107,7 @@
             />
         {/each}
     {:else}
-        <!--Make this message more beautiful-->
+        <!-- Make this message more beautiful -->
         <p style="color: var(--opposite-text)">No messages yet. Be the first one to start a conversation by sending a message below</p>
     {/if}
 </section>

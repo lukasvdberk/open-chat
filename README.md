@@ -10,6 +10,7 @@ Technology used for this project:
 - Fiber as webframework for the go language
 - MySQL for storing information
 - Svelte for the front-end
+- Docker with docker-compose to combine everything
 
 ### Installation 
 Clone the repo to the following location

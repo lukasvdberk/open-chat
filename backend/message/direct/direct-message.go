@@ -2,7 +2,6 @@ package direct
 
 import (
 	"errors"
-	"fmt"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"github.com/lukasvdberk/opensource-discord/friend"
 	"strconv"
@@ -64,12 +63,9 @@ func GetMessagesFromFriend(friendRelationId int64, fromTimeStamp int64) []Friend
 		)
 	} else {
 		// timestamp is specified so we can fetch it with the timestamp.
-		fmt.Println("querying with timestamp")
-		fmt.Println(fromTimeStamp)
-		messagesListMap = database.SelectStatement("SELECT * FROM FriendMessage WHERE friendRelation = ? AND sentAt <= FROM_UNIXTIME(?) ORDER BY sentAt DESC LIMIT "+strconv.Itoa(int(maxMessagesToRetrieve)),
+		messagesListMap = database.SelectStatement("SELECT * FROM FriendMessage WHERE friendRelation = ? AND sentAt < FROM_UNIXTIME(?) ORDER BY sentAt DESC LIMIT "+strconv.Itoa(int(maxMessagesToRetrieve)),
 			friendRelationId, fromTimeStamp,
 		)
-		fmt.Println(messagesListMap)
 	}
 
 	var messages []FriendMessage
