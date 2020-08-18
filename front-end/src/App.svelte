@@ -6,6 +6,7 @@
     import MessageManager from "./components/messages/MessageManager.svelte";
     import {registerDevice} from "./components/notifications/device";
     import {setupNotificationListeners} from "./components/notifications/notification-listener";
+    import {setUserInfoFromApi} from "./components/auth/user-info";
 
     let authenticated = isAuthenticated()
 
@@ -13,6 +14,7 @@
     onAuthenticationStateChange.subscribe((value => {
         // register service worker. currently only needed for push notifications
         if(value) {
+            setUserInfoFromApi()
             registerDevice().then()
             setupNotificationListeners()
         }

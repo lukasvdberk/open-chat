@@ -64,6 +64,21 @@ func CheckUserCredentials(user **User) bool {
 	return false
 }
 
+func GetUserById(userId int64) *User {
+	userListMap := database.SelectStatement(
+		"SELECT * FROM User WHERE id = ? LIMIT 1",
+		userId,
+	)
+	for _, userMap := range userListMap {
+		userToReturn := new(User)
+		userToReturn.Id = userId
+		userToReturn.Username = userMap["username"]
+		userToReturn.ProfilePhoto = userMap["profilePhoto"]
+		return userToReturn
+	}
+	return nil
+}
+
 func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil

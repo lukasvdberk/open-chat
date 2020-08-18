@@ -95,6 +95,12 @@ func GetRoutes(app *fiber.App) *fiber.App {
 		SigningKey: []byte(getJWTSecret()),
 	}))
 
+	app.Get(config.GetDefaultApiRoute()+"/user/get-user-info", func(c *fiber.Ctx) {
+		responses.SuccessResponse(fiber.Map{
+			"user": GetUserById(GetJWTClaimsFromContext(c).Id),
+		}, c)
+	})
+
 	return app
 }
 

@@ -1,8 +1,9 @@
 <script>
     import Message from "./Message.svelte";
     import {getUsername, getUserId} from "../auth/auth";
-    import {currentSelectedFriend} from "../friends/friends-store";
+    import {allCurrentFriends, currentSelectedFriend} from "../friends/friends-store";
     import {afterUpdate, beforeUpdate, createEventDispatcher, onMount} from "svelte";
+    import {getUserInfo} from "../auth/user-info";
 
     export let messages
 
@@ -12,16 +13,20 @@
     let selectedFriend = undefined
     let noNewMessages = false
 
+    let friends = []
+    allCurrentFriends.subscribe((newFriends) => {
+        friends = newFriends
+    })
+
     let dispatch = createEventDispatcher();
 
     function onReachedTop(ignored) {
         dispatch("reached-top")
     }
 
-
     function getUsernameById(id) {
         // gets the username from this client
-        if (thisClientUserId === id) {
+        if (thisClientUserId == id) {
             return thisClientUsername
         } else {
             if(selectedFriend !== undefined) {
@@ -31,12 +36,20 @@
         }
     }
 
+
+
     function getProfilePhoto(id) {
         // TODO refactor this method bc this is not what it is.
         if (thisClientUserId == id) {
-            return "https://file.coffee/u/4SmZXSKoA.png"
+            return getUserInfo().profilePhoto
         }
-        return "https://avatars1.githubusercontent.com/u/38686669?s=128&u=94e13f84dc9e796a9d3a0485d90472f0fd4481b0&v=4"
+
+        for(let i = 0; i < friends.length; i++) {
+            let friend = friends[i]
+            if(friend.id == id) {
+                return friend.profilePhoto
+            }
+        }
     }
 
     currentSelectedFriend.subscribe((newSelectedFriend => {
