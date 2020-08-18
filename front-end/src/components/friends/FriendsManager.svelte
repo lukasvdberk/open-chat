@@ -3,15 +3,18 @@
     import {onMount} from "svelte";
     import {getAmountOfNewMessages, getFriends} from "./friends";
     import Friend from "./Friend.svelte";
-    import {currentSelectedFriend} from "./friends-store";
-
+    import {currentSelectedFriend, allCurrentFriends} from "./friends-store";
 
     let friends = []
-    let amountOfFriendsNewMessages = {}
+
+    // Currently only pushed by push notifications to increase the new message counter
+    allCurrentFriends.subscribe((newFriends) => {
+        friends = newFriends
+    })
 
     onMount(async () => {
         let tmpFriends = await getFriends()
-        amountOfFriendsNewMessages = await getAmountOfNewMessages()
+        let amountOfFriendsNewMessages = await getAmountOfNewMessages()
 
         if(amountOfFriendsNewMessages !== undefined) {
             tmpFriends.forEach((friend) => {
@@ -22,22 +25,26 @@
                 }
             })
             friends = tmpFriends
+            allCurrentFriends.set(friends)
         }
-
     })
 
     function onFriendSelected(event) {
         const friend = event.detail.friend
+
         // up date the store so other components can react to it
-        currentSelectedFriend.set(friend)
 
-        if(amountOfFriendsNewMessages[friend.id] >= 0) {
-            friend.amountOfNewMessages = 0
-            friends.splice(friend, 1)
-            friend.isActive = true
-
-            friends = [...friends, friend]
+        if(friend.amountOfNewMessages >= 0) {
+            friends.forEach((friendFromArr) => {
+                if(friend.id === friendFromArr.id) {
+                    friend.isActive = true
+                    friend.amountOfNewMessages = 0
+                    friendFromArr.isActive = true
+                    friendFromArr.amountOfNewMessages = 0
+                }
+            })
         }
+        currentSelectedFriend.set(friend)
     }
 </script>
 

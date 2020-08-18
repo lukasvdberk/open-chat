@@ -21,7 +21,7 @@
 
     function getUsernameById(id) {
         // gets the username from this client
-        if (thisClientUserId == id) {
+        if (thisClientUserId === id) {
             return thisClientUsername
         } else {
             if(selectedFriend !== undefined) {
@@ -60,6 +60,7 @@
         }
     }
 
+    let oldScrollHeight = 0
     function onScroll(event) {
         if(event.target.scrollTop === 0) {
             // then we reached the top of the page and need to fetch new messages.
@@ -81,6 +82,10 @@
         }
 
         oldMessageSize = messages.length
+
+        if(getMessageContainer() !== undefined) {
+            oldScrollHeight =  getMessageContainer().scrollTop
+        }
     })
 </script>
 

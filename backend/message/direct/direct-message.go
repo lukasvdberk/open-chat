@@ -2,6 +2,7 @@ package direct
 
 import (
 	"errors"
+	"fmt"
 	"github.com/lukasvdberk/opensource-discord/database"
 	"github.com/lukasvdberk/opensource-discord/friend"
 	"strconv"
@@ -102,11 +103,12 @@ func GetAmountOfNewMessagesFromUser(userId int64) map[int64]int64 {
 		"SELECT Friend.user1, Friend.user2, COUNT(*) AS `amount_of_messages` "+
 			"FROM Friend "+
 			"JOIN FriendMessage ON Friend.id = FriendMessage.friendRelation "+
-			"WHERE (Friend.user1 = ? OR Friend.user2 = ?) AND readMessage = false "+
+			"WHERE (Friend.user1 = ? OR Friend.user2 = ?) AND readMessage = false AND fromUser != ? "+
 			"GROUP BY Friend.id",
-		userId, userId,
+		userId, userId, userId,
 	)
 
+	fmt.Println(amountOfMessagesPerFriend)
 	mapToReturn := make(map[int64]int64)
 	for _, friendAmountMessages := range amountOfMessagesPerFriend {
 		var friendId int64 = -1

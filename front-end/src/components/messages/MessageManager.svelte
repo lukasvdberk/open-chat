@@ -12,6 +12,7 @@
     } from "./direct-messages/direct-messages";
     import {currentSelectedFriend} from "../friends/friends-store";
     import {directMessages, saveMessagesToStore, saveMessageToStore} from "./direct-messages/direct-messages-store";
+    import {HIGHLIGHT_NEW_MESSAGE_TIME} from "./settings";
 
     // will be set by the store
     let allMessages = undefined
@@ -71,33 +72,34 @@
     }
 
     function onReachedTop() {
-        // TODO when at the start of a conversation it keeps getting not the latest messages.
-        // of the current channel
-        let firstMessageTimestamp = (Math.min(...channelMessages.map(message => message.sentAt)))
+        if(currentFriend !== undefined) {
+            // of the current channel
+            let firstMessageTimestamp = (Math.min(...channelMessages.map(message => message.sentAt)))
 
-        // fetch new messages
-        getFriendMessagesFromTimestamp(currentFriend.id, firstMessageTimestamp).then((response) => {
-            if (response !== undefined) {
-                let messages = response.messages
+            // fetch new messages
+            getFriendMessagesFromTimestamp(currentFriend.id, firstMessageTimestamp).then((response) => {
+                if (response !== undefined) {
+                    let messages = response.messages
 
-                if(messages == null) {
-                    messages = []
+                    if(messages == null) {
+                        messages = []
+                    }
+
+                    // means there were no new messages to fetch
+                    if(messages.length !== 0) {
+                        saveMessagesToStore(currentFriend.id, messages)
+                    }
+                    else {
+                        noNewMessages = true
+
+                        // so the message wont be in the way
+                        setTimeout(() => noNewMessages = false, 2000)
+                    }
+                } else {
+                    console.log("failed to retrieve messages")
                 }
-
-                // means there were no new messages to fetch
-                if(messages.length !== 0) {
-                    saveMessagesToStore(currentFriend.id, messages)
-                }
-                else {
-                    noNewMessages = true
-
-                    // so the message wont be in the way
-                    setTimeout(() => noNewMessages = false, 2000)
-                }
-            } else {
-                console.log("failed to retrieve messages")
-            }
-        })
+            })
+        }
     }
 
     directMessages.subscribe((newMessages) => {

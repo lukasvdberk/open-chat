@@ -8,3 +8,4 @@ import {writable} from "svelte/store";
 // profilePhoto
 // Set all that in a Object
 export const currentSelectedFriend = writable(undefined);
+export const allCurrentFriends = writable([])

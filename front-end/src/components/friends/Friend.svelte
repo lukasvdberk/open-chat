@@ -17,6 +17,7 @@
                 id: id,
                 username: username,
                 profilePhoto: profilePhoto,
+                amountOfNewMessages: amountOfNewMessages,
             }
         });
     }
@@ -26,6 +27,7 @@
         if (newSelectedFriend) {
             if (newSelectedFriend.id === id) {
                 isActive = true
+                amountOfNewMessages = 0
             }
         }
     }))

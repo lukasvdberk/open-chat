@@ -1,5 +1,6 @@
 <script>
     import ProfileIcon from "../common/img/ProfileIcon.svelte";
+    import {HIGHLIGHT_NEW_MESSAGE_TIME} from "./settings";
 
     export let username = ''
     export let profilePhoto = ''
@@ -20,12 +21,6 @@
         let min = a.getMinutes();
         let sec = a.getSeconds();
         return  + hour + ':' + min + ':' + sec + ' ' + date + ' ' + month + ' ' + year;
-    }
-
-    // After a couple of seconds just say he read it
-    if(hasNotRead) {
-        // TODO make this a fun animation
-        setTimeout(() => hasNotRead = false, 2000)
     }
 </script>
 
@@ -75,7 +70,7 @@
     }
 </style>
 
-<div class:hasNotRead class="container">
+<div class="container">
     <div class="block img-block">
         <ProfileIcon src={profilePhoto} alt={username} />
     </div>
