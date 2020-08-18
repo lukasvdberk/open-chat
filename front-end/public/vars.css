@@ -1,7 +1,7 @@
 :root {
-    --main-bg: #336B87;
+    --main-bg:  #400080;
     --second-bg: white;
-    --is-active: grey;
+    --is-active:  #cc99ff;
     --opposite-text: white;
     --rounding: 8px;
     --icon-height: 8px;
