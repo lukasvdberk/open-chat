@@ -13,9 +13,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./front-end:/front-end/
-#      - TODO fix. for some with this included it wont serve!
-#      - web-static:/front-end/public
+      - web-app:/front-end/public
   backend:
     container_name: backend-go-fiber
     build: backend/
@@ -31,7 +29,6 @@ services:
       - mysql-db
     volumes:
       - ./backend/:/app
-      - web-static:/app/front-end-public
   mysql-db:
     container_name: db-mysql
     restart: always
@@ -43,9 +40,23 @@ services:
     env_file: .env
     volumes:
       - ./mysql-db-data:/var/lib/mysql
+  nginx:
+    container_name: nginx-reverse-proxy
+    restart: always
+    build: nginx
+    expose:
+      - "80"
+    ports:
+      - "0.0.0.0:80:80"
+    volumes:
+      - web-app:/usr/share/nginx/html
+    links:
+      - backend
+    networks:
+      - base
 
 networks:
   base:
 
 volumes:
-  web-static:
+  web-app:

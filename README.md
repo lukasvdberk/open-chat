@@ -36,10 +36,10 @@ The web push keys are required for web notifications. These need to be of the VA
 
 A tool to easily generate such keys like https://vapidkeys.com/
 
-The above settings are only for the backend. After that you need to add a setting.js in 
+The above settings are only for the backend. After that you need to add a settings.js in 
 front-end/src/settings.js with the following content.
 ```js
-export const BASE_API_ENDPOINT="http://127.0.0.1:4000/api/"
+export const BASE_API_ENDPOINT="/api/"
 ```
 If you host your api (the backend of this project) at a different url then change the url.
 
@@ -48,7 +48,7 @@ Simply then run:
 ```bash
 docker-compose up --build --force-recreate
 ```
-The build flag is for building and is only needed the first time. After that simply run:
+The build flag is for building and is only needed the first time (or after a configuration change). After that simply run:
 ```bash
 docker-compose up
 ```
