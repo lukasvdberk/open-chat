@@ -1,17 +1,17 @@
 The front-end of the open source discord written in svelte.
 
 
-###Notes
+# Notes
 
-####Css variables
+#### Css variables
 All colours or general information use must be defined in css variables. Set the variables in public/vars.css
 
 
-####Requests
+#### Requests
 The base url of the api resides in api/request.js. Change that if you have the api server running at a different location
 Also only make request through the api/request.js methods.
 
-###Notifications
+### Notifications
 Notifications are either shown as notification (duh) or when a browser tab is active pushed to the current tab.
 
 To add you own notification handler (for example new messages or something like that.) Do the following steps:

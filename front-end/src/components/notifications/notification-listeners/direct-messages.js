@@ -10,7 +10,7 @@ export function handleDirectMessageNotification(data) {
     const userId = data.fromUser
 
     // If the current channel has no messages yet dont push the current message
-
+    console.log(data)
     addMessageIfChannelExits(userId, data)
     allCurrentFriends.update((currentFriends) => {
         currentFriends.forEach((friend) => {

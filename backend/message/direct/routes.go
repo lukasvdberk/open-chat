@@ -12,7 +12,7 @@ import (
 )
 
 func GetRoutes(app *fiber.App) *fiber.App {
-	// This the channel the server will set for direct-message notifications.
+	// This the channel the server will set for direct-web-rtc-message notifications.
 	messageChannel := "direct-messages"
 	// All the routes for receiving for fetching and messages with friend (dms's not servers)
 

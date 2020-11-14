@@ -28,7 +28,7 @@ type Notification struct {
 	Data                  interface{}           `json:"data"`
 	NotificationPopUpData NotificationPopUpData `json:"popUpData"`
 
-	// Channel should something like "direct-messages" so the friend end know what kinds of notification this is.
+	// Channel should something like "direct-web-rtc-messages" so the friend end know what kinds of notification this is.
 	MessageChannel string `json:"messageChannel"`
 }
 

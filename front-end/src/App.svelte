@@ -7,20 +7,22 @@
     import {registerDevice} from "./components/notifications/device";
     import {setupNotificationListeners} from "./components/notifications/notification-listener";
     import {setUserInfoFromApi} from "./components/auth/user-info";
+    import VoiceManager from "./components/voice/VoiceManager.svelte";
 
     let authenticated = isAuthenticated()
 
     // So it will redirect if the user is not logged in
     onAuthenticationStateChange.subscribe((value => {
         // register service worker. currently only needed for push notifications
-        if(value) {
+        if (value) {
             setUserInfoFromApi()
-            registerDevice().then()
+            registerDevice().then(() => {
+                setupNotificationListeners()
+            })
             setupNotificationListeners()
         }
         authenticated = value
     }))
-
 
 
 </script>
@@ -43,6 +45,16 @@
         width: 85%;
         float: right;
     }
+
+    div.voice {
+        width: 85%;
+        height: 10%;
+        position: fixed;
+        top: 0;
+        left: 15%;
+        background-color: var(--second-bg);
+        border-radius: var(--rounding);
+    }
 </style>
 
 {#if !authenticated}
@@ -54,6 +66,9 @@
         </div>
         <div class="messages">
             <MessageManager />
+        </div>
+        <div class="voice">
+            <VoiceManager />
         </div>
     </main>
 {/if}

@@ -14,6 +14,8 @@ services:
       - "5000:5000"
     volumes:
       - web-app:/front-end/public
+      # For live code reloading
+      - ./front-end/src/:/front-end/src/
   backend:
     container_name: backend-go-fiber
     build: backend/
