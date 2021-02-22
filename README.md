@@ -1,15 +1,14 @@
 ### About
-An open source discord alternative with privacy, efficiency and hack ability in mind.
+An self hosted chat application for you and your friends, with privacy, efficiency and hack ability in mind.
 
 **This will be a prototype**
 
 
 Technology used for this project:
 
-- Go as the programming language for the backend
-- Fiber as webframework for the go language
-- MySQL for storing information
+- Fiber as RESTful API with the go language
 - Svelte for the front-end
+- MySQL for storing data
 - Docker with docker-compose to combine everything
 
 ### Installation 
@@ -45,10 +44,6 @@ If you host your api (the backend of this project) at a different url then chang
 
 To run this project make sure docker and docker-compose is installed.
 Simply then run:
-```bash
-docker-compose up --build --force-recreate
-```
-The build flag is for building and is only needed the first time (or after a configuration change). After that simply run:
 ```bash
 docker-compose up
 ```
